@@ -34,20 +34,56 @@ const styles = StyleSheet.create({
 
 });
 
+// Might want to add additional features in the future like a required duration or stuff for categorical habits
+function Habit(name, schedule, month_goal) {
+  this.habit_name = name;
+  this.history = {};
+  //A map of the day of week to time of day the activity has to be complete
+  // Value is 'X' if the activity is not scheudled for that day of the week
+  this.schedule = schedule;
+  this.goal = month_goal;
+};
+
+const DAY_OF_WEEK = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+function constructSchedule(days) {
+  let noSchedule = (Object.keys(days).length == 0);
+  let schedule = {}
+  DAY_OF_WEEK.map((day, i) => {
+    //If a plan is specified that just blank initialize
+    if (noSchedule) {
+      schedule[day] = "Anytime"
+    }
+    //Else assume habit is to be done everyday at anytime
+    else {
+      schedule[day] = "X"
+    }
+  })
+  //If a plan is specified then insert those tasks into the schedule
+  if (!noSchedule) {
+    Object.keys(days).map((day, i) => {
+      schedule[day] = days[day]
+    })
+  }
+  return schedule;
+}
+
+//HABITS ARE HARDCODED FOR NOW
+//Later should be loaded from user profile in persistent storage
 const habits = [
-  'Stretch', 
-  'Yoga', 
-  'Prehab', 
-  'Water', 
-  'Hang Board', 
-  'Lift', 
-  'Foam Roll'
+  new Habit("Stretch", constructSchedule({}), 30),
+  new Habit("Yoga", constructSchedule({"Monday": "Evening", "Wednesday": "Afternoon", "Friday": "Evening"}), 15),
+  new Habit("Prehab", constructSchedule({}), 30),
+  new Habit("Water", constructSchedule({}), 30),
+  new Habit("Hang Board", constructSchedule({"Tuesday": "Evening", "Saturday": "Anytime"}), 6),
+  new Habit("Lift", constructSchedule({"Monday": "Evening", "Wednesday": "Afternoon", "Friday": "Evening"}), 15),
+  new Habit("Foam Roll", constructSchedule({}), 30)
 ]
 
 export default class HelloWorldApp extends Component {
   constructor(props) {
     super(props);
     this.state = { pressStatus: Array.from(Array(habits.length), (_, i) => false)};
+    console.log(habits);
   }
   toggleButtonStatus = (i) => {
     console.log(this.state);
@@ -71,7 +107,7 @@ export default class HelloWorldApp extends Component {
             return (
               <View style={[styles.habit, this.state.pressStatus[i] ? styles.onButton : styles.offButton]}>
                 <Button
-                  title={habit}
+                  title={habit.habit_name}
                   onPress={() => this.toggleButtonStatus(i)}
                 >
                 </Button>
