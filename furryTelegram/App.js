@@ -37,11 +37,16 @@ const styles = StyleSheet.create({
 // Might want to add additional features in the future like a required duration or stuff for categorical habits
 function Habit(name, schedule, month_goal) {
   this.habit_name = name;
-  this.history = {};
+  this.history = {"2":2, 'test': 'test2'};
   //A map of the day of week to time of day the activity has to be complete
   // Value is 'X' if the activity is not scheudled for that day of the week
   this.schedule = schedule;
   this.goal = month_goal;
+  //This currently just looks at all log entries for a particular habit
+  // In the future could look for different metrics like max weight, num total hours, etc.
+  this.getProgress = function () {
+    return Math.round(Object.keys(this.history).length*100.0/this.goal)/100;
+  }
 };
 
 const DAY_OF_WEEK = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
@@ -86,13 +91,21 @@ export default class HelloWorldApp extends Component {
     console.log(habits);
   }
   toggleButtonStatus = (i) => {
-    console.log(this.state);
+    console.log(this.state)
     this.setState((previousState) => {
       let newPressStatus = previousState.pressStatus;
       newPressStatus[i] = !newPressStatus[i];
       return {pressStatus: newPressStatus}
     }
     )
+    //Add activity to habit history
+    if (!this.state.pressStatus[i]) {
+      habits[i].history[`test${i}`] = `testVal${i}`
+    }
+    //Remove false log from habit history
+    else {
+      delete habits[i].history[`test${i}`]
+    }
   }
   render() {
     return (
@@ -111,6 +124,9 @@ export default class HelloWorldApp extends Component {
                   onPress={() => this.toggleButtonStatus(i)}
                 >
                 </Button>
+                <Text>
+                  {habit.getProgress()}
+                </Text>
               </View>
             )
           })}
