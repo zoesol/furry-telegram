@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, Button, Text, View } from 'react-native';
+import DialogInput from 'react-native-dialog-input';
 
 const styles = StyleSheet.create({
   homePage: {
@@ -37,7 +38,7 @@ const styles = StyleSheet.create({
 // Might want to add additional features in the future like a required duration or stuff for categorical habits
 function Habit(name, schedule, month_goal) {
   this.habit_name = name;
-  this.history = {"2":2, 'test': 'test2'};
+  this.history = {};
   //A map of the day of week to time of day the activity has to be complete
   // Value is 'X' if the activity is not scheudled for that day of the week
   this.schedule = schedule;
@@ -46,6 +47,11 @@ function Habit(name, schedule, month_goal) {
   // In the future could look for different metrics like max weight, num total hours, etc.
   this.getProgress = function () {
     return Math.round(Object.keys(this.history).length*100.0/this.goal)/100;
+  }
+  this.setHistory = function (logText) {
+    //Just uses random numer as key right now
+    //In the future make this the current date and time
+    this.history[Math.random()] = logText
   }
 };
 
@@ -72,26 +78,34 @@ function constructSchedule(days) {
   return schedule;
 }
 
-//HABITS ARE HARDCODED FOR NOW
-//Later should be loaded from user profile in persistent storage
-const habits = [
-  new Habit("Stretch", constructSchedule({}), 30),
-  new Habit("Yoga", constructSchedule({"Monday": "Evening", "Wednesday": "Afternoon", "Friday": "Evening"}), 15),
-  new Habit("Prehab", constructSchedule({}), 30),
-  new Habit("Water", constructSchedule({}), 30),
-  new Habit("Hang Board", constructSchedule({"Tuesday": "Evening", "Saturday": "Anytime"}), 6),
-  new Habit("Lift", constructSchedule({"Monday": "Evening", "Wednesday": "Afternoon", "Friday": "Evening"}), 15),
-  new Habit("Foam Roll", constructSchedule({}), 30)
-]
-
 export default class HelloWorldApp extends Component {
   constructor(props) {
     super(props);
-    this.state = { pressStatus: Array.from(Array(habits.length), (_, i) => false)};
-    console.log(habits);
+    this.state = { 
+      isDialogVisible: false,
+      // HABITS ARE HARDCODED FOR NOW
+      // Later should be loaded from user profile in persistent storage
+      habits: [
+        new Habit("Stretch", constructSchedule({}), 30),
+        new Habit("Yoga", constructSchedule({"Monday": "Evening", "Wednesday": "Afternoon", "Friday": "Evening"}), 15),
+        new Habit("Prehab", constructSchedule({}), 30),
+        new Habit("Water", constructSchedule({}), 30),
+        new Habit("Hang Board", constructSchedule({"Tuesday": "Evening", "Saturday": "Anytime"}), 6),
+        new Habit("Lift", constructSchedule({"Monday": "Evening", "Wednesday": "Afternoon", "Friday": "Evening"}), 15),
+        new Habit("Foam Roll", constructSchedule({}), 30)
+      ],
+      pressStatus: Array.from(7, (_, i) => false),
+      lastPressed: null
+    };
+  }
+  //Changing habits.history here doesnt work because this call back is create when the render is run 
+  // This function is create at habits.history's intial state and then all future executions operation on the same instance
+  // So it updates the copy but doesnt have the real thing
+  logHabit = (inputText) => {
+    this.state.habits[this.state.lastPressed].setHistory(inputText)
+    this.setState({isDialogVisible: false})
   }
   toggleButtonStatus = (i) => {
-    console.log(this.state)
     this.setState((previousState) => {
       let newPressStatus = previousState.pressStatus;
       newPressStatus[i] = !newPressStatus[i];
@@ -100,12 +114,12 @@ export default class HelloWorldApp extends Component {
     )
     //Add activity to habit history
     if (!this.state.pressStatus[i]) {
-      habits[i].history[`test${i}`] = `testVal${i}`
+      this.setState({
+        isDialogVisible: true,
+        lastPressed: i
+      })
     }
-    //Remove false log from habit history
-    else {
-      delete habits[i].history[`test${i}`]
-    }
+    //Add multilogging functinality (ex if I stretch more than once in a day)
   }
   render() {
     return (
@@ -116,7 +130,7 @@ export default class HelloWorldApp extends Component {
           </Text>
         </View>
         <View style={styles.habitGroup}>
-          {habits.map((habit, i) => {
+          {this.state.habits.map((habit, i) => {
             return (
               <View style={[styles.habit, this.state.pressStatus[i] ? styles.onButton : styles.offButton]}>
                 <Button
@@ -130,6 +144,13 @@ export default class HelloWorldApp extends Component {
               </View>
             )
           })}
+          <DialogInput isDialogVisible={this.state.isDialogVisible}
+            title={'DialogInput'}
+            message={"Message for DialogInput"}
+            hintInput ={"HINT INPUT"}
+            submitInput={ (inputText) => {this.logHabit(inputText)} }
+            closeDialog={ () => {this.showDialog(false)}}>
+          </DialogInput>
         </View>
       </View>
     );
