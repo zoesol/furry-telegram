@@ -21,7 +21,12 @@ const styles = StyleSheet.create({
   },
   habit: {
     width: 80, height: 80, margin: 10,
+  },
+  onButton: {
     backgroundColor:"blue"
+  },
+  offButton: {
+    backgroundColor:"green"
   },
   pageTitle: {
     top: '10%',
@@ -40,6 +45,19 @@ const habits = [
 ]
 
 export default class HelloWorldApp extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { pressStatus: Array.from(Array(habits.length), (_, i) => false)};
+  }
+  toggleButtonStatus = (i) => {
+    console.log(this.state);
+    this.setState((previousState) => {
+      let newPressStatus = previousState.pressStatus;
+      newPressStatus[i] = !newPressStatus[i];
+      return {pressStatus: newPressStatus}
+    }
+    )
+  }
   render() {
     return (
       <View style={styles.homePage}>
@@ -51,9 +69,10 @@ export default class HelloWorldApp extends Component {
         <View style={styles.habitGroup}>
           {habits.map((habit, i) => {
             return (
-              <View style={styles.habit}>
+              <View style={[styles.habit, this.state.pressStatus[i] ? styles.onButton : styles.offButton]}>
                 <Button
                   title={habit}
+                  onPress={() => this.toggleButtonStatus(i)}
                 >
                 </Button>
               </View>
