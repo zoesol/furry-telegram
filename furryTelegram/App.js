@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, Button, Text, View } from 'react-native';
 import DialogInput from 'react-native-dialog-input';
 import { createStackNavigator, createAppContainer } from 'react-navigation';
+import AddHabitPage from './AddHabit';
 
 const styles = StyleSheet.create({
   homePage: {
@@ -83,7 +84,7 @@ function constructSchedule(days) {
   return schedule;
 }
 
-class HelloWorldApp extends Component {
+class HomePage extends Component {
   constructor(props) {
     super(props);
     this.state = { 
@@ -163,7 +164,7 @@ class HelloWorldApp extends Component {
       <View style={styles.addHabitButton}>
         <Button
           title="New Habit"
-          onPress={() => this.props.navigation.navigate('Detail')}
+          onPress={() => this.props.navigation.navigate('AddHabit')}
         />
       </View>
     )
@@ -188,20 +189,10 @@ class HelloWorldApp extends Component {
   }
 }
 
-class DetailsScreen extends React.Component {
-  render() {
-    return (
-      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-        <Text>Details Screen</Text>
-      </View>
-    );
-  }
-}
-
 const AppNavigator = createStackNavigator(
   {
-    Home: HelloWorldApp,
-    Detail: DetailsScreen,
+    Home: HomePage,
+    AddHabit: AddHabitPage,
   },
   {
     initialRouteName: "Home"
