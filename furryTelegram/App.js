@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, Button, Text, View } from 'react-native';
 import DialogInput from 'react-native-dialog-input';
+import { createStackNavigator, createAppContainer } from 'react-navigation';
 
 const styles = StyleSheet.create({
   homePage: {
@@ -31,7 +32,11 @@ const styles = StyleSheet.create({
   },
   pageTitle: {
     top: '10%',
-  }
+  },
+  addHabitButton: {
+    right: '35%',
+    backgroundColor:"purple"
+  },
 
 });
 
@@ -78,7 +83,7 @@ function constructSchedule(days) {
   return schedule;
 }
 
-export default class HelloWorldApp extends Component {
+class HelloWorldApp extends Component {
   constructor(props) {
     super(props);
     this.state = { 
@@ -104,6 +109,7 @@ export default class HelloWorldApp extends Component {
   logHabit = (inputText) => {
     this.state.habits[this.state.lastPressed].setHistory(inputText)
     this.setState({isDialogVisible: false})
+    console.log(this.props)
   }
   toggleButtonStatus = (i) => {
     this.setState((previousState) => {
@@ -126,8 +132,14 @@ export default class HelloWorldApp extends Component {
       <View style={styles.homePage}>
         <View style={styles.pageTitle}>
           <Text>
-            Home Page
+            Home Pages
           </Text>
+        </View>
+        <View style={styles.addHabitButton}>
+          <Button
+            title="New Habit"
+            onPress={() => this.props.navigation.navigate('Detail')}
+          />
         </View>
         <View style={styles.habitGroup}>
           {this.state.habits.map((habit, i) => {
@@ -136,8 +148,7 @@ export default class HelloWorldApp extends Component {
                 <Button
                   title={habit.habit_name}
                   onPress={() => this.toggleButtonStatus(i)}
-                >
-                </Button>
+                />
                 <Text>
                   {habit.getProgress()}
                 </Text>
@@ -154,5 +165,33 @@ export default class HelloWorldApp extends Component {
         </View>
       </View>
     );
+  }
+}
+
+class DetailsScreen extends React.Component {
+  render() {
+    return (
+      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+        <Text>Details Screen</Text>
+      </View>
+    );
+  }
+}
+
+const AppNavigator = createStackNavigator(
+  {
+    Home: HelloWorldApp,
+    Detail: DetailsScreen,
+  },
+  {
+    initialRouteName: "Home"
+  }
+);
+
+const AppContainer = createAppContainer(AppNavigator);
+
+export default class App extends React.Component {
+  render() {
+    return <AppContainer />;
   }
 }
