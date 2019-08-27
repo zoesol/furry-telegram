@@ -127,42 +127,62 @@ class HelloWorldApp extends Component {
     }
     //Add multilogging functinality (ex if I stretch more than once in a day)
   }
+  addDiaglogInputComponent = () => {
+    return (
+      <DialogInput isDialogVisible={this.state.isDialogVisible}
+        title={'DialogInput'}
+        message={"Message for DialogInput"}
+        hintInput ={"HINT INPUT"}
+        submitInput={ (inputText) => {this.logHabit(inputText)} }
+        closeDialog={ () => {this.showDialog(false)}}>
+      </DialogInput>
+    )
+  }
+  addHabitButtonComponents = () => {
+    return (
+      <View style={styles.habitGroup}>
+        {this.state.habits.map((habit, i) => {
+          return (
+            <View style={[styles.habit, this.state.pressStatus[i] ? styles.onButton : styles.offButton]}>
+              <Button
+                title={habit.habit_name}
+                onPress={() => this.toggleButtonStatus(i)}
+              />
+              <Text>
+                {habit.getProgress()}
+              </Text>
+            </View>
+          )
+        })}
+        {this.addDiaglogInputComponent()}
+      </View>
+    )
+  }
+  addAddHabitButtonComponent = () => {
+    return (
+      <View style={styles.addHabitButton}>
+        <Button
+          title="New Habit"
+          onPress={() => this.props.navigation.navigate('Detail')}
+        />
+      </View>
+    )
+  }
+  addPageTitleComponent = () => {
+    return (
+      <View style={styles.pageTitle}>
+        <Text>
+          Home Pages
+        </Text>
+      </View>
+    )
+  }
   render() {
     return (
       <View style={styles.homePage}>
-        <View style={styles.pageTitle}>
-          <Text>
-            Home Pages
-          </Text>
-        </View>
-        <View style={styles.addHabitButton}>
-          <Button
-            title="New Habit"
-            onPress={() => this.props.navigation.navigate('Detail')}
-          />
-        </View>
-        <View style={styles.habitGroup}>
-          {this.state.habits.map((habit, i) => {
-            return (
-              <View style={[styles.habit, this.state.pressStatus[i] ? styles.onButton : styles.offButton]}>
-                <Button
-                  title={habit.habit_name}
-                  onPress={() => this.toggleButtonStatus(i)}
-                />
-                <Text>
-                  {habit.getProgress()}
-                </Text>
-              </View>
-            )
-          })}
-          <DialogInput isDialogVisible={this.state.isDialogVisible}
-            title={'DialogInput'}
-            message={"Message for DialogInput"}
-            hintInput ={"HINT INPUT"}
-            submitInput={ (inputText) => {this.logHabit(inputText)} }
-            closeDialog={ () => {this.showDialog(false)}}>
-          </DialogInput>
-        </View>
+        {this.addPageTitleComponent()}
+        {this.addAddHabitButtonComponent()}
+        {this.addHabitButtonComponents()}
       </View>
     );
   }
