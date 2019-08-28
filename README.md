@@ -3,10 +3,11 @@
 
 # How to Run and Develop Locally:
 
-git clone the repo   
+git clone the repo
+npm install from project root  
 cd into 'ios'  
 run 'pod install'  
-mv to to project root directory  
+mv back to project root directory  
 run 'react-native run-ios' 
 <br>
 
@@ -24,3 +25,8 @@ View Developer Tools as Normal on Remote Page
 Look at that console for console.logs.  
 <br>
 
+
+# Notes
+
+Sometimes there will be a random error with a hast cache map or something.  
+When this happens just delete the repo and reclone.  
