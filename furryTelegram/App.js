@@ -3,6 +3,7 @@ import { StyleSheet, Button, Text, View } from 'react-native';
 import DialogInput from 'react-native-dialog-input';
 import { createStackNavigator, createAppContainer } from 'react-navigation';
 import AddHabitPage from './AddHabit';
+import Habit from './Habit';
 
 const styles = StyleSheet.create({
   homePage: {
@@ -41,49 +42,6 @@ const styles = StyleSheet.create({
 
 });
 
-// Might want to add additional features in the future like a required duration or stuff for categorical habits
-function Habit(name, schedule, month_goal) {
-  this.habit_name = name;
-  this.history = {};
-  //A map of the day of week to time of day the activity has to be complete
-  // Value is 'X' if the activity is not scheudled for that day of the week
-  this.schedule = schedule;
-  this.goal = month_goal;
-  //This currently just looks at all log entries for a particular habit
-  // In the future could look for different metrics like max weight, num total hours, etc.
-  this.getProgress = function () {
-    return Math.round(Object.keys(this.history).length*100.0/this.goal)/100;
-  }
-  this.setHistory = function (logText) {
-    //Just uses random numer as key right now
-    //In the future make this the current date and time
-    this.history[Math.random()] = logText
-  }
-};
-
-const DAY_OF_WEEK = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-function constructSchedule(days) {
-  let noSchedule = (Object.keys(days).length == 0);
-  let schedule = {}
-  DAY_OF_WEEK.map((day, i) => {
-    //If a plan is specified that just blank initialize
-    if (noSchedule) {
-      schedule[day] = "Anytime"
-    }
-    //Else assume habit is to be done everyday at anytime
-    else {
-      schedule[day] = "X"
-    }
-  })
-  //If a plan is specified then insert those tasks into the schedule
-  if (!noSchedule) {
-    Object.keys(days).map((day, i) => {
-      schedule[day] = days[day]
-    })
-  }
-  return schedule;
-}
-
 class HomePage extends Component {
   constructor(props) {
     super(props);
@@ -92,21 +50,18 @@ class HomePage extends Component {
       // HABITS ARE HARDCODED FOR NOW
       // Later should be loaded from user profile in persistent storage
       habits: [
-        new Habit("Stretch", constructSchedule({}), 30),
-        new Habit("Yoga", constructSchedule({"Monday": "Evening", "Wednesday": "Afternoon", "Friday": "Evening"}), 15),
-        new Habit("Prehab", constructSchedule({}), 30),
-        new Habit("Water", constructSchedule({}), 30),
-        new Habit("Hang Board", constructSchedule({"Tuesday": "Evening", "Saturday": "Anytime"}), 6),
-        new Habit("Lift", constructSchedule({"Monday": "Evening", "Wednesday": "Afternoon", "Friday": "Evening"}), 15),
-        new Habit("Foam Roll", constructSchedule({}), 30)
+        // new Habit("Stretch", {}, 30),
+        // new Habit("Yoga", {"Monday": "Evening", "Wednesday": "Afternoon", "Friday": "Evening"}, 15),
+        // new Habit("Prehab", {}, 30),
+        // new Habit("Water", {}, 30),
+        // new Habit("Hang Board", {"Tuesday": "Evening", "Saturday": "Anytime"}, 6),
+        // new Habit("Lift", {"Monday": "Evening", "Wednesday": "Afternoon", "Friday": "Evening"}, 15),
       ],
       pressStatus: Array.from(7, (_, i) => false),
       lastPressed: null
     };
   }
-  //Changing habits.history here doesnt work because this call back is create when the render is run 
-  // This function is create at habits.history's intial state and then all future executions operation on the same instance
-  // So it updates the copy but doesnt have the real thing
+  
   logHabit = (inputText) => {
     this.state.habits[this.state.lastPressed].setHistory(inputText)
     this.setState({isDialogVisible: false})
@@ -143,6 +98,7 @@ class HomePage extends Component {
     return (
       <View style={styles.habitGroup}>
         {this.state.habits.map((habit, i) => {
+          console.log(habit, i)
           return (
             <View style={[styles.habit, this.state.pressStatus[i] ? styles.onButton : styles.offButton]}>
               <Button
@@ -159,12 +115,20 @@ class HomePage extends Component {
       </View>
     )
   }
+  addNewHabit = (newHabit) => {
+    this.setState(previousState => ({ 
+      habits: [...previousState.habits, newHabit]
+    }))
+    console.log("Adding a new habit")
+  }
   addAddHabitButtonComponent = () => {
     return (
       <View style={styles.addHabitButton}>
         <Button
           title="New Habit"
-          onPress={() => this.props.navigation.navigate('AddHabit')}
+          onPress={() => this.props.navigation.navigate('AddHabit', {
+            addHabitCallback: this.addNewHabit
+          })}
         />
       </View>
     )
@@ -178,6 +142,7 @@ class HomePage extends Component {
       </View>
     )
   }
+
   render() {
     return (
       <View style={styles.homePage}>
