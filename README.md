@@ -25,3 +25,8 @@ View Developer Tools as Normal on Remote Page
 Look at that console for console.logs.  
 <br>
 
+
+# Notes
+
+Sometimes there will be a random error with a hast cache map or something.  
+When this happens just delete the repo and reclone.  
