@@ -3,10 +3,11 @@
 
 # How to Run and Develop Locally:
 
-git clone the repo   
+git clone the repo
+npm install from project root  
 cd into 'ios'  
 run 'pod install'  
-mv to to project root directory  
+mv back to project root directory  
 run 'react-native run-ios' 
 <br>
 
