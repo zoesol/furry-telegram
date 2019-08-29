@@ -102,9 +102,8 @@ class HomePage extends Component {
     return (
       <View style={styles.habitGroup}>
         {this.state.habits.map((habit, i) => {
-          console.log(habit, i)
           return (
-            <View style={[styles.habit, this.state.pressStatus[i] ? styles.onButton : styles.offButton]}>
+            <View key={i} style={[styles.habit, this.state.pressStatus[i] ? styles.onButton : styles.offButton]}>
               <Button
                 title={habit.habit_name}
                 onPress={() => this.handleHabitButtonClick(i)}
