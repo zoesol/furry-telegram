@@ -63,18 +63,19 @@ class HomePage extends Component {
   }
   
   logHabit = (inputText) => {
+    this.togglePressStatus(this.state.lastPressed)
     this.state.habits[this.state.lastPressed].setHistory(inputText)
     this.setState({isDialogVisible: false})
-    console.log(this.props)
   }
-  toggleButtonStatus = (i) => {
+  togglePressStatus = (i) => {
     this.setState((previousState) => {
       let newPressStatus = previousState.pressStatus;
       newPressStatus[i] = !newPressStatus[i];
       return {pressStatus: newPressStatus}
-    }
+      }
     )
-    //Add activity to habit history
+  }
+  handleHabitButtonClick = (i) => {
     if (!this.state.pressStatus[i]) {
       this.setState({
         isDialogVisible: true,
@@ -83,6 +84,9 @@ class HomePage extends Component {
     }
     //Add multilogging functinality (ex if I stretch more than once in a day)
   }
+  handleCloseDialog = () => {
+    this.setState({isDialogVisible: false})
+  }
   addDiaglogInputComponent = () => {
     return (
       <DialogInput isDialogVisible={this.state.isDialogVisible}
@@ -90,7 +94,7 @@ class HomePage extends Component {
         message={"Message for DialogInput"}
         hintInput ={"HINT INPUT"}
         submitInput={ (inputText) => {this.logHabit(inputText)} }
-        closeDialog={ () => {this.showDialog(false)}}>
+        closeDialog={ () => {this.handleCloseDialog()}}>
       </DialogInput>
     )
   }
@@ -103,7 +107,7 @@ class HomePage extends Component {
             <View style={[styles.habit, this.state.pressStatus[i] ? styles.onButton : styles.offButton]}>
               <Button
                 title={habit.habit_name}
-                onPress={() => this.toggleButtonStatus(i)}
+                onPress={() => this.handleHabitButtonClick(i)}
               />
               <Text>
                 {habit.getProgress()}
