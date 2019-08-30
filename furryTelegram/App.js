@@ -3,6 +3,7 @@ import { StyleSheet, Button, Text, View } from 'react-native';
 import DialogInput from 'react-native-dialog-input';
 import { createStackNavigator, createAppContainer } from 'react-navigation';
 import AddHabitPage from './AddHabit';
+import LTGoalsPage from './GoalsPage';
 import Habit from './Habit';
 
 const styles = StyleSheet.create({
@@ -39,6 +40,10 @@ const styles = StyleSheet.create({
     right: '35%',
     backgroundColor:"purple"
   },
+  goalsButton: {
+    left: '35%',
+    backgroundColor:"purple"
+  }
 
 });
 
@@ -136,6 +141,17 @@ class HomePage extends Component {
       </View>
     )
   }
+
+  addGoalsButtonComponent = () => {
+    return (
+      <View style={styles.goalsButton}>
+        <Button
+          title="Goals"
+          onPress={() => this.props.navigation.navigate('Goals')}
+        />
+      </View>
+    )
+  }
   addPageTitleComponent = () => {
     return (
       <View style={styles.pageTitle}>
@@ -151,6 +167,7 @@ class HomePage extends Component {
       <View style={styles.homePage}>
         {this.addPageTitleComponent()}
         {this.addAddHabitButtonComponent()}
+        {this.addGoalsButtonComponent()}
         {this.addHabitButtonComponents()}
       </View>
     );
@@ -161,6 +178,7 @@ const AppNavigator = createStackNavigator(
   {
     Home: HomePage,
     AddHabit: AddHabitPage,
+    Goals: LTGoalsPage, 
   },
   {
     initialRouteName: "Home"
