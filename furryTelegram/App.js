@@ -4,6 +4,7 @@ import DialogInput from 'react-native-dialog-input';
 import { createStackNavigator, createAppContainer } from 'react-navigation';
 import AddHabitPage from './AddHabit';
 import LTGoalsPage from './GoalsPage';
+import AddGoalsPage from './AddLongTermGoal'
 import Habit from './Habit';
 
 const styles = StyleSheet.create({
@@ -55,12 +56,12 @@ class HomePage extends Component {
       // HABITS ARE HARDCODED FOR NOW
       // Later should be loaded from user profile in persistent storage
       habits: [
-        // new Habit("Stretch", {}, 30),
-        // new Habit("Yoga", {"Monday": "Evening", "Wednesday": "Afternoon", "Friday": "Evening"}, 15),
-        // new Habit("Prehab", {}, 30),
-        // new Habit("Water", {}, 30),
-        // new Habit("Hang Board", {"Tuesday": "Evening", "Saturday": "Anytime"}, 6),
-        // new Habit("Lift", {"Monday": "Evening", "Wednesday": "Afternoon", "Friday": "Evening"}, 15),
+        new Habit("Stretch", {}, 30),
+        new Habit("Yoga", {"Monday": "Evening", "Wednesday": "Afternoon", "Friday": "Evening"}, 15),
+        new Habit("Prehab", {}, 30),
+        new Habit("Water", {}, 30),
+        new Habit("Hang Board", {"Tuesday": "Evening", "Saturday": "Anytime"}, 6),
+        new Habit("Lift", {"Monday": "Evening", "Wednesday": "Afternoon", "Friday": "Evening"}, 15),
       ],
       pressStatus: Array.from(7, (_, i) => false),
       lastPressed: null
@@ -127,7 +128,6 @@ class HomePage extends Component {
     this.setState(previousState => ({ 
       habits: [...previousState.habits, newHabit]
     }))
-    console.log("Adding a new habit")
   }
   addAddHabitButtonComponent = () => {
     return (
@@ -178,7 +178,8 @@ const AppNavigator = createStackNavigator(
   {
     Home: HomePage,
     AddHabit: AddHabitPage,
-    Goals: LTGoalsPage, 
+    Goals: LTGoalsPage,
+    AddGoal: AddGoalsPage, 
   },
   {
     initialRouteName: "Home"

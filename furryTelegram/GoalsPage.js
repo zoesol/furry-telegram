@@ -57,6 +57,11 @@ export default class LTGoalsPage extends Component {
     };
   }
 
+  addNewGoal = (newGoal) => {
+    this.setState(previousState => ({ 
+      goals: [...previousState.goals, newGoal]
+    }))  }
+
   render() {
     return (
       <View style={styles.root}>
@@ -85,7 +90,9 @@ export default class LTGoalsPage extends Component {
         <View style={styles.addGoalButton}>
           <Button
             title="Add New Goal"
-            onPress={() => {console.log("Add New Button")}}
+            onPress={() => this.props.navigation.navigate('AddGoal', {
+              addGoalCallback: this.addNewGoal
+            })}
           />
         </View>
       </View>
