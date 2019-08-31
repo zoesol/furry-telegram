@@ -11,6 +11,11 @@ export default class AddGoalPage extends React.Component {
             'end_date': "",
         };
     }
+
+    static navigationOptions = {
+        title: 'New Goal Page',
+      };
+
     handleNameInput = (inputText) => {
         this.setState({
             name: inputText

@@ -57,6 +57,10 @@ export default class LTGoalsPage extends Component {
     };
   }
 
+  static navigationOptions = {
+    title: 'Long Term Goals',
+  };
+
   addNewGoal = (newGoal) => {
     this.setState(previousState => ({ 
       goals: [...previousState.goals, newGoal]

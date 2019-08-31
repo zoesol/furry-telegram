@@ -11,6 +11,10 @@ export default class AddHabitPage extends React.Component {
             'goal': 0,
         };
     }
+    static navigationOptions = {
+        title: 'Add Habit Page',
+    };
+
     handleNameInput = (inputText) => {
         this.setState({
             name: inputText

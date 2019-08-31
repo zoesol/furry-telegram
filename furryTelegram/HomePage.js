@@ -63,6 +63,10 @@ export default class HomePage extends Component {
       lastPressed: null
     };
   }
+
+  static navigationOptions = {
+    title: 'Home',
+  };
   
   logHabit = (inputText) => {
     this.togglePressStatus(this.state.lastPressed)
