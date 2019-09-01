@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { StyleSheet, Button, Text, View } from 'react-native';
 import DialogInput from 'react-native-dialog-input';
 import Habit from './Habit';
+import LongTermGoal from './LongTermGoal';
+
 
 const styles = StyleSheet.create({
   homePage: {
@@ -59,6 +61,16 @@ export default class HomePage extends Component {
         new Habit("Hang Board", {"Tuesday": "Evening", "Saturday": "Anytime"}, 6),
         new Habit("Lift", {"Monday": "Evening", "Wednesday": "Afternoon", "Friday": "Evening"}, 15),
       ],
+      goals: [
+        new LongTermGoal(
+          "Send LaRambla", 
+          "I will achieve this goal by getting HELLA endurance", 
+          '10/20/20'),
+        new LongTermGoal(
+         "Splits Rotation", 
+         "Start in front splits, rotate to middle splits, and end in the other side splits!", 
+         "10/20/20"),
+     ],
       pressStatus: Array.from(7, (_, i) => false),
       lastPressed: null
     };
@@ -129,6 +141,12 @@ export default class HomePage extends Component {
       habits: [...previousState.habits, newHabit]
     }))
   }
+
+  addNewGoal = (newGoal) => {
+    this.setState(previousState => ({ 
+      goals: [...previousState.goals, newGoal]
+    }))  
+  }
   addAddHabitButtonComponent = () => {
     return (
       <View style={styles.addHabitButton}>
@@ -147,7 +165,10 @@ export default class HomePage extends Component {
       <View style={styles.goalsButton}>
         <Button
           title="Goals"
-          onPress={() => this.props.navigation.navigate('Goals')}
+          onPress={() => this.props.navigation.navigate('Goals', {
+            goals: this.state.goals,
+            addGoalCallback: this.addNewGoal
+          })}
         />
       </View>
     )
@@ -160,6 +181,9 @@ export default class HomePage extends Component {
         </Text>
       </View>
     )
+  }
+  componentWillUnmount = () => {
+    console.log("Unmounting Home Page")
   }
 
   render() {

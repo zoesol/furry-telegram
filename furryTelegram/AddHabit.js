@@ -30,6 +30,11 @@ export default class AddHabitPage extends React.Component {
             goal: inputText
         })
     }
+
+    componentWillUnmount = () => {
+        console.log("Unmounting Add Habit Page")
+      }
+      
     render() {
       return (
         // <Text>Add Habit Page</Text>

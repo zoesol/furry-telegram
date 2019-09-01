@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { StyleSheet, Button, Text, View } from 'react-native';
-import LongTermGoal from './LongTermGoal';
 
 const styles = StyleSheet.create({
   root: {
@@ -41,30 +40,28 @@ const styles = StyleSheet.create({
 });
 
 export default class LTGoalsPage extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
-    this.state = { 
-      goals: [
-         new LongTermGoal(
-           "Send LaRambla", 
-           "I will achieve this goal by getting HELLA endurance", 
-           '10/20/20'),
-         new LongTermGoal(
-          "Splits Rotation", 
-          "Start in front splits, rotate to middle splits, and end in the other side splits!", 
-          "10/20/20"),
-      ],
-    };
+    this.state = {
+      goals: []
+    }
   }
-
   static navigationOptions = {
     title: 'Long Term Goals',
   };
 
-  addNewGoal = (newGoal) => {
+  addGoalCallback = (newGoal) => {
     this.setState(previousState => ({ 
       goals: [...previousState.goals, newGoal]
-    }))  }
+    })) 
+    this.props.navigation.getParam('addGoalCallback', () => {})(newGoal)
+  }
+
+  componentWillMount = () => {
+    this.setState({
+      goals: this.props.navigation.getParam('goals', [])
+    }) 
+  }
 
   render() {
     return (
@@ -95,7 +92,7 @@ export default class LTGoalsPage extends Component {
           <Button
             title="Add New Goal"
             onPress={() => this.props.navigation.navigate('AddGoal', {
-              addGoalCallback: this.addNewGoal
+              addGoalCallback: this.addGoalCallback
             })}
           />
         </View>
