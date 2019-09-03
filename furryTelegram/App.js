@@ -4,6 +4,15 @@ import HomePage from './HomePage';
 import AddHabitPage from './AddHabit';
 import LTGoalsPage from './GoalsPage';
 import AddGoalsPage from './AddLongTermGoal'
+import { createBottomTabNavigator } from 'react-navigation-tabs';
+
+
+const TabNavigator = createBottomTabNavigator(
+  {
+    Home: HomePage,
+    Goals: LTGoalsPage
+  }
+);
 
 const AppNavigator = createStackNavigator(
   {
@@ -11,11 +20,14 @@ const AppNavigator = createStackNavigator(
     AddHabit: AddHabitPage,
     Goals: LTGoalsPage,
     AddGoal: AddGoalsPage, 
+    Footer: TabNavigator
   },
   {
     initialRouteName: "Home"
   }
 );
+
+
 
 const AppContainer = createAppContainer(AppNavigator);
 

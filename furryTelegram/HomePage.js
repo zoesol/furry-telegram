@@ -74,6 +74,7 @@ export default class HomePage extends Component {
       pressStatus: Array.from(7, (_, i) => false),
       lastPressed: null
     };
+    props.navigation.navigate("Footer")
   }
 
   static navigationOptions = {
