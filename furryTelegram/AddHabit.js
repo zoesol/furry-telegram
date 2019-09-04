@@ -11,6 +11,10 @@ export default class AddHabitPage extends React.Component {
             'goal': 0,
         };
     }
+    static navigationOptions = {
+        title: 'Add Habit Page',
+    };
+
     handleNameInput = (inputText) => {
         this.setState({
             name: inputText
@@ -26,6 +30,11 @@ export default class AddHabitPage extends React.Component {
             goal: inputText
         })
     }
+
+    componentWillUnmount = () => {
+        console.log("Unmounting Add Habit Page")
+      }
+      
     render() {
       return (
         // <Text>Add Habit Page</Text>

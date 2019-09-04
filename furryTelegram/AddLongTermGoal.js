@@ -11,6 +11,11 @@ export default class AddGoalPage extends React.Component {
             'end_date': "",
         };
     }
+
+    static navigationOptions = {
+        title: 'New Goal Page',
+      };
+
     handleNameInput = (inputText) => {
         this.setState({
             name: inputText
@@ -26,6 +31,10 @@ export default class AddGoalPage extends React.Component {
             end_date: inputText
         })
     }
+    componentWillUnmount = () => {
+        console.log("Unmounting Add Goal Page")
+      }
+
     render() {
       return (
         // <Text>Add Habit Page</Text>
@@ -52,7 +61,6 @@ export default class AddGoalPage extends React.Component {
                 <Button
                     title="Submit"
                     onPress={() => {
-                      console.log(this.props)
                       const addNewGoal = this.props.navigation.getParam('addGoalCallback', () => {})
                       addNewGoal(
                         new Goal(
