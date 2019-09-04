@@ -23,7 +23,7 @@ const AppNavigator = createStackNavigator(
     Footer: TabNavigator
   },
   {
-    initialRouteName: "Home"
+    initialRouteName: "Footer"
   }
 );
 

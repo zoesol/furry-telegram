@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, Button, Text, View } from 'react-native';
+import LongTermGoal from './LongTermGoal';
 
 const styles = StyleSheet.create({
   root: {
@@ -43,8 +44,16 @@ export default class LTGoalsPage extends Component {
   constructor (props) {
     super(props);
     this.state = {
-      goals: []
-    }
+      goals: [
+        new LongTermGoal(
+          "Send LaRambla", 
+          "I will achieve this goal by getting HELLA endurance", 
+          '10/20/20'),
+        new LongTermGoal(
+         "Splits Rotation", 
+         "Start in front splits, rotate to middle splits, and end in the other side splits!", 
+         "10/20/20"),
+     ],    }
   }
   static navigationOptions = {
     title: 'Long Term Goals',
@@ -54,13 +63,6 @@ export default class LTGoalsPage extends Component {
     this.setState(previousState => ({ 
       goals: [...previousState.goals, newGoal]
     })) 
-    this.props.navigation.getParam('addGoalCallback', () => {})(newGoal)
-  }
-
-  componentWillMount = () => {
-    this.setState({
-      goals: this.props.navigation.getParam('goals', [])
-    }) 
   }
 
   render() {

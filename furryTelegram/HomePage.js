@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { StyleSheet, Button, Text, View, YellowBox } from 'react-native';
 import Dialog from 'react-native-dialog';
 import Habit from './Habit';
-import LongTermGoal from './LongTermGoal';
 
 YellowBox.ignoreWarnings([
   'Warning: componentWillReceiveProps is deprecated',
@@ -74,16 +73,6 @@ export default class HomePage extends Component {
         new Habit("Hang Board", {"Tuesday": "Evening", "Saturday": "Anytime"}, 6),
         new Habit("Lift", {"Monday": "Evening", "Wednesday": "Afternoon", "Friday": "Evening"}, 15),
       ],
-      goals: [
-        new LongTermGoal(
-          "Send LaRambla", 
-          "I will achieve this goal by getting HELLA endurance", 
-          '10/20/20'),
-        new LongTermGoal(
-         "Splits Rotation", 
-         "Start in front splits, rotate to middle splits, and end in the other side splits!", 
-         "10/20/20"),
-     ],
       pressStatus: Array.from(7, (_, i) => false),
       lastPressed: null
     };
@@ -157,11 +146,6 @@ export default class HomePage extends Component {
     }))
   }
 
-  addNewGoal = (newGoal) => {
-    this.setState(previousState => ({ 
-      goals: [...previousState.goals, newGoal]
-    }))  
-  }
   addAddHabitButtonComponent = () => {
     return (
       <View style={styles.addHabitButton}>
@@ -176,20 +160,6 @@ export default class HomePage extends Component {
     )
   }
 
-  addGoalsButtonComponent = () => {
-    return (
-      <View style={styles.goalsButton}>
-        <Button
-          title="Goals"
-          onPress={() => this.props.navigation.navigate('Goals', {
-            goals: this.state.goals,
-            addGoalCallback: this.addNewGoal
-          })}
-          color='white'
-        />
-      </View>
-    )
-  }
   addPageTitleComponent = () => {
     return (
       <View style={styles.pageTitle}>
@@ -208,7 +178,6 @@ export default class HomePage extends Component {
       <View style={styles.homePage}>
         {this.addPageTitleComponent()}
         {this.addAddHabitButtonComponent()}
-        {this.addGoalsButtonComponent()}
         {this.addHabitButtonComponents()}
       </View>
     );
