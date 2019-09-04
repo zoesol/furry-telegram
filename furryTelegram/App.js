@@ -1,29 +1,36 @@
 import React, { Component } from 'react';
 import { StyleSheet, Button, Text, View } from 'react-native';
-import DialogInput from 'react-native-dialog-input';
+import Dialog from 'react-native-dialog';
 import { createStackNavigator, createAppContainer } from 'react-navigation';
 import AddHabitPage from './AddHabit';
 import LTGoalsPage from './GoalsPage';
 import AddGoalsPage from './AddLongTermGoal'
 import Habit from './Habit';
+import { YellowBox } from 'react-native';
+
+YellowBox.ignoreWarnings([
+  'Warning: componentWillReceiveProps is deprecated',
+]);
 
 const styles = StyleSheet.create({
   homePage: {
+    flex: 1,
     position: "absolute",
     alignItems: "center",
     width: '100%',
     height: '100%',
   },
   habitGroup: {
-    flex: 1,
     width: '100%',
-    height: '100%',
+    height: '50%',
+    top: '95%',
     justifyContent: 'space-between',
     alignItems: 'center',
     alignContent: 'center',
     flexWrap: 'wrap',
     flexDirection: 'row',
     position: 'relative',
+    backgroundColor: 'lightgrey'
   },
   habit: {
     width: 80, height: 80, margin: 10,
@@ -38,14 +45,22 @@ const styles = StyleSheet.create({
     top: '10%',
   },
   addHabitButton: {
-    right: '35%',
-    backgroundColor:"purple"
+    position: 'absolute',
+    top: '10%',
+    left: '10%',
+    backgroundColor:"purple",
+    width: '30%'
   },
   goalsButton: {
-    left: '35%',
-    backgroundColor:"purple"
+    top: '10%',
+    position: 'absolute',
+    right: '10%',
+    backgroundColor:"purple",
+    width: '30%'
+  },
+  habitButtonText: {
+    textAlign: 'center'
   }
-
 });
 
 class HomePage extends Component {
@@ -71,7 +86,7 @@ class HomePage extends Component {
   logHabit = (inputText) => {
     this.togglePressStatus(this.state.lastPressed)
     this.state.habits[this.state.lastPressed].setHistory(inputText)
-    this.setState({isDialogVisible: false})
+    this.setState({isDialogVisible: false, noteText: ""})
   }
   togglePressStatus = (i) => {
     this.setState((previousState) => {
@@ -95,13 +110,13 @@ class HomePage extends Component {
   }
   addDiaglogInputComponent = () => {
     return (
-      <DialogInput isDialogVisible={this.state.isDialogVisible}
-        title={'DialogInput'}
-        message={"Message for DialogInput"}
-        hintInput ={"HINT INPUT"}
-        submitInput={ (inputText) => {this.logHabit(inputText)} }
-        closeDialog={ () => {this.handleCloseDialog()}}>
-      </DialogInput>
+      <Dialog.Container visible={this.state.isDialogVisible} contentStyle={{height: 300, paddingBottom: 120}}>
+        <Dialog.Title>Dialog Input</Dialog.Title>
+        <Dialog.Description>Message for Dialog Input</Dialog.Description>
+        <Dialog.Input height="100%" multiline={true} onChangeText={(inputtxt)=> this.setState({noteText: inputtxt})}></Dialog.Input>
+        <Dialog.Button label="Cancel" onPress={this.handleCloseDialog}></Dialog.Button>
+        <Dialog.Button label="Submit" onPress={() => this.logHabit(this.state.noteText)}></Dialog.Button>
+      </Dialog.Container> 
     )
   }
   addHabitButtonComponents = () => {
@@ -113,8 +128,9 @@ class HomePage extends Component {
               <Button
                 title={habit.habit_name}
                 onPress={() => this.handleHabitButtonClick(i)}
+                color='black'
               />
-              <Text>
+              <Text style={styles.habitButtonText}>
                 {habit.getProgress()}
               </Text>
             </View>
@@ -129,10 +145,12 @@ class HomePage extends Component {
       habits: [...previousState.habits, newHabit]
     }))
   }
+
   addAddHabitButtonComponent = () => {
     return (
       <View style={styles.addHabitButton}>
         <Button
+          color='white'
           title="New Habit"
           onPress={() => this.props.navigation.navigate('AddHabit', {
             addHabitCallback: this.addNewHabit
@@ -146,6 +164,7 @@ class HomePage extends Component {
     return (
       <View style={styles.goalsButton}>
         <Button
+          color='white'
           title="Goals"
           onPress={() => this.props.navigation.navigate('Goals')}
         />
@@ -156,8 +175,17 @@ class HomePage extends Component {
     return (
       <View style={styles.pageTitle}>
         <Text>
-          Home Pages
+          Home
         </Text>
+      </View>
+    )
+  }
+
+  addNavigationButtonsComponent = () => {
+    return (
+      <View style={{width: '100%', flexDirection:'row'}}>
+        {this.addAddHabitButtonComponent()}
+        {this.addGoalsButtonComponent()}
       </View>
     )
   }
@@ -166,8 +194,7 @@ class HomePage extends Component {
     return (
       <View style={styles.homePage}>
         {this.addPageTitleComponent()}
-        {this.addAddHabitButtonComponent()}
-        {this.addGoalsButtonComponent()}
+        {this.addNavigationButtonsComponent()}
         {this.addHabitButtonComponents()}
       </View>
     );
