@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import { StyleSheet, Button, Text, View } from 'react-native';
+import { StyleSheet, Button, Text, View, YellowBox } from 'react-native';
 import Dialog from 'react-native-dialog';
 import Habit from './Habit';
 import LongTermGoal from './LongTermGoal';
-import { YellowBox } from 'react-native';
 
 YellowBox.ignoreWarnings([
   'Warning: componentWillReceiveProps is deprecated',
