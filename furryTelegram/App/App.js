@@ -6,7 +6,32 @@ import LTGoalsPage from './GoalsPage';
 import AddGoalsPage from './AddGoalPage';
 import HabitListPage from './HabitListPage';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
+import Habit from './Habit';
 
+
+export default class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { 
+      habits: [
+        new Habit("Stretch", "Continuous", {}, 30, 60),
+        new Habit("Yoga", "Binary", {"Monday": "Evening", "Wednesday": "Afternoon", "Friday": "Evening"}, 15, null),
+        new Habit("Prehab", "Binary", {}, 30, null),
+        new Habit("Water", "Continuous", {}, 30, 1),
+      ],
+    };
+  }
+  addNewHabitCallback = (newHabit) => {
+    this.setState(previousState => ({ 
+      habits: [...previousState.habits, newHabit]
+    }))  
+  }
+  render() {
+    return <AppContainer 
+      screenProps = {{'habits':this.state.habits, 'addNewHabitCallback':this.addNewHabitCallback}}
+    />;
+  }
+}
 
 const TabNavigator = createBottomTabNavigator(
   {
@@ -19,7 +44,7 @@ const TabNavigator = createBottomTabNavigator(
     Habits: {
       screen: HabitListPage,
       navigationOptions: {
-        headerTitle: 'Habits'
+        headerTitle: 'Habits',
       }
     },
     Goals: {
@@ -51,6 +76,12 @@ const AppNavigator = createStackNavigator(
         headerTitle: 'Create New Goal'
       }
     },
+    HabitDetail: {
+      screen: HabitDetailPage,
+      navigationOptions: {
+        headerTitle: 'Habit Details'
+      }
+    },
     Footer: TabNavigator
   },
   {
@@ -61,9 +92,3 @@ const AppNavigator = createStackNavigator(
 
 
 const AppContainer = createAppContainer(AppNavigator);
-
-export default class App extends React.Component {
-  render() {
-    return <AppContainer />;
-  }
-}

@@ -125,7 +125,8 @@ handleCloseDialog = () => {
         <Button
           title="New Habit"
           onPress={() => this.props.navigation.navigate('AddHabit', {
-            addHabitCallback: this.props.screenProps.addNewHabitCallback
+            addHabitCallback: this.props.screenProps.addNewHabitCallback,
+            src: "Home"
           })}
           color='white'
         />
