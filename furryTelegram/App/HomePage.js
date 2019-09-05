@@ -8,14 +8,6 @@ export default class HomePage extends React.Component {
     super(props);
     this.state = { 
       isDialogVisible: false,
-      // HABITS ARE HARDCODED FOR NOW
-      // Later should be loaded from user profile in persistent storage
-      habits: [
-        new Habit("Stretch", "Continuous", {}, 30, 60),
-        new Habit("Yoga", "Binary", {"Monday": "Evening", "Wednesday": "Afternoon", "Friday": "Evening"}, 15, null),
-        new Habit("Prehab", "Binary", {}, 30, null),
-        new Habit("Water", "Continuous", {}, 30, 1),
-      ],
       pressStatus: Array.from(7, (_, i) => 0),
       lastPressed: 0,
       logText: "",
@@ -30,7 +22,7 @@ export default class HomePage extends React.Component {
   addHabitButtonComponents = () => {
     return (
       <View style={styles.habitGroup}>
-        {this.state.habits.map((habit, i) => {
+        {this.props.screenProps.habits.map((habit, i) => {
           bWidth = 0
           backcolor = `#07d400`;
           if (this.state.pressStatus[i]) {
@@ -58,7 +50,7 @@ export default class HomePage extends React.Component {
   }
 
   handleHabitButtonClick = (i) => {
-    if (this.state.habits[i].type == "Continuous" || this.state.pressStatus[i] < 1.0 || !this.state.pressStatus[i]) {
+    if (this.props.screenProps.habits[i].type == "Continuous" || this.state.pressStatus[i] < 1.0 || !this.state.pressStatus[i]) {
       this.setState({
         isDialogVisible: true,
         lastPressed: i
@@ -70,10 +62,10 @@ export default class HomePage extends React.Component {
  * Create a Diaglog Input Component used for logging of a completed Habit
  */
   addDiaglogInputComponent = () => {
-    if (this.state.habits[this.state.lastPressed].type == "Continuous") {
+    if (this.props.screenProps.habits[this.state.lastPressed].type == "Continuous") {
       return (
         <Dialog.Container visible={this.state.isDialogVisible} contentStyle={{height: 300, paddingBottom: 120}}>
-        <Dialog.Title>{this.state.habits[this.state.lastPressed].habit_name} Log</Dialog.Title>
+        <Dialog.Title>{this.props.screenProps.habits[this.state.lastPressed].habit_name} Log</Dialog.Title>
         {/* <Dialog.Description>Message for Dialog Input</Dialog.Description> */}
         <Dialog.Input height="30%" multiline={false} onChangeText={(inputText)=> this.handleHabitLogIntervalInput(inputText)}></Dialog.Input>
         <Dialog.Input height="70%" multiline={true} onChangeText={(inputText)=> this.handleHabitLogTextInput(inputText)}></Dialog.Input>
@@ -82,10 +74,10 @@ export default class HomePage extends React.Component {
       </Dialog.Container> 
       )
     }
-    else if (this.state.habits[this.state.lastPressed].type == "Binary") {
+    else if (this.props.screenProps.habits[this.state.lastPressed].type == "Binary") {
       return (
         <Dialog.Container visible={this.state.isDialogVisible} contentStyle={{height: 300, paddingBottom: 120}}>
-          <Dialog.Title>{this.state.habits[this.state.lastPressed].habit_name} Log</Dialog.Title>
+          <Dialog.Title>{this.props.screenProps.habits[this.state.lastPressed].habit_name} Log</Dialog.Title>
           {/* <Dialog.Description>Message for Dialog Input</Dialog.Description> */}
           <Dialog.Input height="100%" multiline={true} onChangeText={(inputText)=> this.handleHabitLogTextInput(inputText)}></Dialog.Input>
           <Dialog.Button label="Cancel" onPress={this.handleCloseDialog}></Dialog.Button>
@@ -108,11 +100,11 @@ handleHabitLogTextInput = (inputText) => {
 }
 
 handleSubmitDialog = () => {
-  this.state.habits[this.state.lastPressed].updateLog(this.state.logText, this.state.logInterval)
+  this.props.screenProps.habits[this.state.lastPressed].updateLog(this.state.logText, this.state.logInterval)
 
   this.setState((previousState) => {
     let newPressStatus = previousState.pressStatus;
-    newPressStatus[this.state.lastPressed] = this.state.habits[this.state.lastPressed].getProgressTowardsMinimum();
+    newPressStatus[this.state.lastPressed] = this.props.screenProps.habits[this.state.lastPressed].getProgressTowardsMinimum();
     return {pressStatus: newPressStatus}
     }
   )
@@ -133,20 +125,12 @@ handleCloseDialog = () => {
         <Button
           title="New Habit"
           onPress={() => this.props.navigation.navigate('AddHabit', {
-            addHabitCallback: this.addNewHabitCallback
+            addHabitCallback: this.props.screenProps.addNewHabitCallback
           })}
           color='white'
         />
       </View>
     )
-  }
-
-  addNewHabitCallback = (newHabit) => {
-    console.log(newHabit)
-    this.setState(previousState => ({ 
-      habits: [...previousState.habits, newHabit]
-    }))
-    console.log(this.state.habits)
   }
 
 
