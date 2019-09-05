@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, TextInput, Button, Text, View } from 'react-native';
+import { StyleSheet, TextInput, Button, View, Picker } from 'react-native';
 import Habit from './Habit';
 
 /*
@@ -9,15 +9,47 @@ export default class AddHabitPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            'name': "",
+            'name': '',
             'schedule': {},
             'goal': 0,
+            'minimum': 0,
+            'type': 'Binary'
         };
+    }
+
+    addHabitTypePickerComponent = () => {
+        return (
+            <View style={styles.habitTypePicker}>
+            <Picker
+                selectedValue={this.state.type}
+                style={{height: 20, width: 100}}
+                onValueChange={(itemValue, itemIndex) => {
+                    console.log("Value Changing Here", itemValue)
+                    this.setState({type: itemValue})
+                }
+                }>
+                <Picker.Item label="Binary" value="Binary" />
+                <Picker.Item label="Continuous" value="Continous" />
+            </Picker>
+            </View>
+        )
     }
 
     /*
     * Creates a TextInput Component
     */
+
+    addTextInputComponents = () => {
+        return (
+            <View>
+                {this.addTextInputComponent("Habit Name", this.handleNameInput)}
+                {this.addTextInputComponent("Schedule", this.handleScheduleInput)}
+                {this.addTextInputComponent("Goal", this.handleGoalInput)}
+                {this.addTextInputComponent("Minimum", this.handleMinimumInput)}
+            </View>
+        )
+    }
+
     addTextInputComponent = (name, callback) => {
         return (
             <TextInput style={styles.input}
@@ -44,6 +76,11 @@ export default class AddHabitPage extends React.Component {
             goal: inputText
         })
     }
+    handleMinimumInput = (inputText) => {
+        this.setState({
+            minimum: inputText
+        })
+    }
 
     /*
     * Creates a Button Component used to Submit
@@ -61,7 +98,7 @@ export default class AddHabitPage extends React.Component {
 
     handleSubmitButtonPress = () => {
         const addNewHabit = this.props.navigation.getParam('addHabitCallback', () => {})
-        addNewHabit(new Habit(this.state.name, this.state.schedule, this.state.goal))
+        addNewHabit(new Habit(this.state.name, this.state.type, this.state.schedule, this.state.goal, this.state.minimum))
         this.props.navigation.navigate('Home')
     }
       
@@ -69,9 +106,8 @@ export default class AddHabitPage extends React.Component {
     render() {
       return (
         <View style={styles.container}>
-            {this.addTextInputComponent("Habit Name", this.handleNameInput)}
-            {this.addTextInputComponent("Schedule", this.handleScheduleInput)}
-            {this.addTextInputComponent("Goal", this.handleGoalInput)}
+            {this.addHabitTypePickerComponent()}
+            {this.addTextInputComponents()}
             {this.addSubmitButtonComponent()}
         </View>
       );
@@ -96,5 +132,10 @@ const styles = StyleSheet.create({
     },
     submitButtonText:{
        color: 'white'
-    }
+    },
+    habitTypePicker: {
+        height: '40%',
+        width: '100%',
+        
+    },
  })

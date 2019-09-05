@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, TextInput, Button, Text, View } from 'react-native';
+import { StyleSheet, TextInput, Button, View} from 'react-native';
 import Goal from './LongTermGoal';
 
 export default class AddGoalPage extends React.Component {
@@ -93,5 +93,10 @@ const styles = StyleSheet.create({
     },
     submitButtonText:{
        color: 'white'
-    }
+    },
+    debugView: {
+        backgroundColor: 'red',
+        height: '100%',
+        width: '100%'
+    },
  })
