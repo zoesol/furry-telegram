@@ -3,7 +3,8 @@ import { createStackNavigator, createAppContainer } from 'react-navigation';
 import HomePage from './HomePage';
 import AddHabitPage from './AddHabitPage';
 import LTGoalsPage from './GoalsPage';
-import AddGoalsPage from './AddGoalPage'
+import AddGoalsPage from './AddGoalPage';
+import HabitListPage from './HabitListPage';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 
 
@@ -13,6 +14,12 @@ const TabNavigator = createBottomTabNavigator(
       screen: HomePage,
       navigationOptions: {
         headerTitle: 'Home'
+      }
+    },
+    Habits: {
+      screen: HabitListPage,
+      navigationOptions: {
+        headerTitle: 'Habits'
       }
     },
     Goals: {
