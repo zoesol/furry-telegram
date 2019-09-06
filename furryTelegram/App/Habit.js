@@ -1,11 +1,11 @@
 /*
 * Object: Habit
 */
-export default function Habit(name, type, schedule, month_goal, minimum) {
+export default function Habit(name, type, schedule, month_goal, minimum, history) {
     this.habit_name = name;
     //Binary or Continuous
     this.type = type;
-    this.history = {};
+    this.history = history;
     //A map of the day of week to time of day the activity has to be complete
     // Value is 'X' if the activity is not scheudled for that day of the week
     this.schedule = constructSchedule(schedule);

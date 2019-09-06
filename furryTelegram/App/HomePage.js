@@ -160,11 +160,6 @@ handleCloseDialog = () => {
   }
 }
 
-//Silences the designated warnings
-YellowBox.ignoreWarnings([
-  'Warning: componentWillReceiveProps is deprecated',
-]);
-
 const styles = StyleSheet.create({
   homePage: {
     flex: 1,

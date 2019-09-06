@@ -8,29 +8,117 @@ import HabitListPage from './HabitListPage';
 import HabitDetailPage from './HabitDetailPage';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import Habit from './Habit';
+import LongTermGoal from './LongTermGoal';
+import AsyncStorage from '@react-native-community/async-storage';
+import { StyleSheet, Button, Text, View } from 'react-native';
+
+_storeData = async (key, value) => {
+  try {
+    await AsyncStorage.setItem(key, value);
+  } catch (error) {
+    console.log(error)
+  }
+};
+
+_retrieveData = async (key) => {
+  try {
+    const value = await AsyncStorage.getItem(key);
+    if (value !== null) {
+      return value
+    }
+  } catch (error) {
+    console.log(error)
+  }
+};
+
+defaultData = {
+  "habits": [
+      new Habit("Stretch", "Continuous", {}, 30, 60, {}),
+      new Habit("Yoga", "Binary", {"Monday": "Evening", "Wednesday": "Afternoon", "Friday": "Evening"}, 15, null, {}),
+      new Habit("Prehab", "Binary", {}, 30, null, {}),
+      new Habit("Water", "Continuous", {}, 30, 1, {}),
+  ],
+  "goals": [
+    new LongTermGoal(
+      "Send LaRambla", 
+      "I will achieve this goal by getting HELLA endurance", 
+      '10/20/20'),
+    new LongTermGoal(
+      "Splits Rotation", 
+     "Start in front splits, rotate to middle splits, and end in the other side splits!", 
+      "10/20/20"),
+  ],
+}
+
+useDefaults = () => {
+  _storeData('state', JSON.stringify(defaultData))
+}
 
 
 export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = { 
-      habits: [
-        new Habit("Stretch", "Continuous", {}, 30, 60),
-        new Habit("Yoga", "Binary", {"Monday": "Evening", "Wednesday": "Afternoon", "Friday": "Evening"}, 15, null),
-        new Habit("Prehab", "Binary", {}, 30, null),
-        new Habit("Water", "Continuous", {}, 30, 1),
-      ],
+      stateLoaded: false,
+      habits: [],
+      goals: [],
     };
+    this.initializeState().then(() => {
+      this.setState({stateLoaded: true})
+    })
   }
-  addNewHabitCallback = (newHabit) => {
+
+  initializeState = async () => {
+    return AsyncStorage.getItem('state').then((value) => {
+      stateData = JSON.parse(value)
+      habits = []
+      stateData['habits'].map((raw_habit, i) => {
+        habits.push(new Habit(raw_habit.habit_name, raw_habit.type, raw_habit.schedule, raw_habit.goal, raw_habit.minimum, raw_habit.history))
+      })
+      goals = []
+      stateData['goals'].map((raw_goal, i) => {
+        goals.push(new LongTermGoal(raw_goal.goal_name, raw_goal.description, raw_goal.end_date))
+      })
+      this.setState({habits: habits, goals: goals})
+    })
+  }
+
+  addNewHabitCallback = async (newHabit) => {
     this.setState(previousState => ({ 
       habits: [...previousState.habits, newHabit]
     }))  
   }
+  addNewGoalCallback = async (newGoal) => {
+    this.setState(previousState => ({ 
+      goals: [...previousState.goals, newGoal]
+    }))  
+  }
+
+  componentDidUpdate = () => {
+    console.log("Component Did Update")
+    _storeData('state', JSON.stringify({'habits':this.state.habits, 'goals':this.state.goals}))
+  }
+
   render() {
-    return <AppContainer 
-      screenProps = {{'habits':this.state.habits, 'addNewHabitCallback':this.addNewHabitCallback}}
-    />;
+    if(this.state.stateLoaded) {
+      return <AppContainer 
+        screenProps = {{
+          'habits':this.state.habits, 
+          'addNewHabitCallback':this.addNewHabitCallback,
+          'goals':this.state.goals,
+          'addNewGoalCallback':this.addNewGoalCallback,
+        }}
+      />;
+    }
+    else {
+      return (
+        <View style={{top: "50%", alignItems: "center", height: '100%', width:'100%'}}>
+          <Text>
+            Loading...
+          </Text>
+        </View>
+      )
+    }
   }
 }
 

@@ -98,7 +98,7 @@ export default class AddHabitPage extends React.Component {
     handleSubmitButtonPress = () => {
         const addNewHabit = this.props.navigation.getParam('addHabitCallback', () => {})
         const src = this.props.navigation.getParam('src', () => {})
-        addNewHabit(new Habit(this.state.name, this.state.type, this.state.schedule, this.state.goal, this.state.minimum))
+        addNewHabit(new Habit(this.state.name, this.state.type, this.state.schedule, this.state.goal, this.state.minimum, {}))
         this.props.navigation.navigate(src)
     }
       
