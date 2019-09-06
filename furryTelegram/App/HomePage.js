@@ -62,11 +62,11 @@ export default class HomePage extends React.Component {
  * Create a Diaglog Input Component used for logging of a completed Habit
  */
   addDiaglogInputComponent = () => {
+    let dialogTitle = `${this.props.screenProps.habits[this.state.lastPressed].habit_name} Log`
     if (this.props.screenProps.habits[this.state.lastPressed].type == "Continuous") {
       return (
         <Dialog.Container visible={this.state.isDialogVisible} contentStyle={{height: 300, paddingBottom: 120}}>
-        <Dialog.Title>{this.props.screenProps.habits[this.state.lastPressed].habit_name} Log</Dialog.Title>
-        {/* <Dialog.Description>Message for Dialog Input</Dialog.Description> */}
+        <Dialog.Title> {dialogTitle} </Dialog.Title>
         <Dialog.Input height="30%" multiline={false} onChangeText={(inputText)=> this.handleHabitLogIntervalInput(inputText)}></Dialog.Input>
         <Dialog.Input height="70%" multiline={true} onChangeText={(inputText)=> this.handleHabitLogTextInput(inputText)}></Dialog.Input>
         <Dialog.Button label="Cancel" onPress={this.handleCloseDialog}></Dialog.Button>
@@ -77,7 +77,7 @@ export default class HomePage extends React.Component {
     else if (this.props.screenProps.habits[this.state.lastPressed].type == "Binary") {
       return (
         <Dialog.Container visible={this.state.isDialogVisible} contentStyle={{height: 300, paddingBottom: 120}}>
-          <Dialog.Title>{this.props.screenProps.habits[this.state.lastPressed].habit_name} Log</Dialog.Title>
+          <Dialog.Title> {dialogTitle} </Dialog.Title>
           {/* <Dialog.Description>Message for Dialog Input</Dialog.Description> */}
           <Dialog.Input height="100%" multiline={true} onChangeText={(inputText)=> this.handleHabitLogTextInput(inputText)}></Dialog.Input>
           <Dialog.Button label="Cancel" onPress={this.handleCloseDialog}></Dialog.Button>

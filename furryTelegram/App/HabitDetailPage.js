@@ -5,6 +5,7 @@ export default class HabitListPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = { 
+        habit: props.navigation.getParam('habit', null)
     };
   }
 
@@ -15,7 +16,7 @@ export default class HabitListPage extends React.Component {
     return (
       <View style={styles.pageTitle}>
         <Text>
-          {this.props.habit.habit_name}
+          {this.state.habit.habit_name}
         </Text>
       </View>
     )

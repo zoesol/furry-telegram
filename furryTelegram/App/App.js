@@ -5,6 +5,7 @@ import AddHabitPage from './AddHabitPage';
 import LTGoalsPage from './GoalsPage';
 import AddGoalsPage from './AddGoalPage';
 import HabitListPage from './HabitListPage';
+import HabitDetailPage from './HabitDetailPage';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import Habit from './Habit';
 
