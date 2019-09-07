@@ -1,7 +1,6 @@
 import React from 'react';
 import { StyleSheet, Button, Text, View, YellowBox } from 'react-native';
 import Dialog from 'react-native-dialog';
-import Habit from './Habit';
 
 export default class HomePage extends React.Component {
   constructor(props) {
@@ -136,6 +135,30 @@ handleCloseDialog = () => {
 
 
   /*
+  * Creates a Text Component for today's date
+  */
+ addDateComponent = () => {
+   if (this.props.screenProps.devMode) {
+    currDate = this.props.screenProps.devDate
+   }
+   else {
+    currDate = new Date()
+   }
+   var date =  currDate.getDate(); //Current Date
+   var month = currDate.getMonth(); //Current Month
+   var year = currDate.getFullYear(); //Current Year
+   currDate = date + '/' + month + '/' + year
+
+   return (
+    <View style={styles.dateText}>
+      <Text>
+        Today's date is... {currDate}
+      </Text>
+    </View>
+  )
+}
+
+  /*
   * Creates a Text Component for the Page Title
   */
   addPageTitleComponent = () => {
@@ -153,6 +176,7 @@ handleCloseDialog = () => {
     return (
       <View style={styles.homePage}>
         {this.addPageTitleComponent()}
+        {this.addDateComponent()}
         {this.addNewHabitButtonComponent()}
         {this.addHabitButtonComponents()}
       </View>
@@ -204,5 +228,8 @@ const styles = StyleSheet.create({
   },
   habitButtonText: {
     textAlign: 'center'
+  },
+  dateText: {
+    top: '35%'
   }
 });

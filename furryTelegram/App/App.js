@@ -60,8 +60,10 @@ export default class App extends React.Component {
     super(props);
     this.state = { 
       stateLoaded: false,
+      devMode: false,
       habits: [],
       goals: [],
+      devDate: new Date(2019,1, 1)
     };
     this.initializeState().then(() => {
       this.setState({stateLoaded: true})
@@ -95,7 +97,6 @@ export default class App extends React.Component {
   }
 
   componentDidUpdate = () => {
-    console.log("Component Did Update")
     _storeData('state', JSON.stringify({'habits':this.state.habits, 'goals':this.state.goals}))
   }
 
@@ -107,6 +108,8 @@ export default class App extends React.Component {
           'addNewHabitCallback':this.addNewHabitCallback,
           'goals':this.state.goals,
           'addNewGoalCallback':this.addNewGoalCallback,
+          'devMode': this.state.devMode,
+          'devDate': this.state.devDate
         }}
       />;
     }

@@ -74,10 +74,16 @@ export default function Habit(name, type, schedule, month_goal, minimum, history
   };
 
 function getDate() {
-  var date = new Date().getDate(); //Current Date
-  var month = new Date().getMonth() + 1; //Current Month
-  var year = new Date().getFullYear(); //Current Year
-  return (date + '/' + month + '/' + year);
+  if (devMode) {
+    date = this.props.screenProps.devDate
+  }
+  else {
+    date = new Date()
+  }
+    var date = date.getDate(); //Current Date
+    var month = date.getMonth() + 1; //Current Month
+    var year = date.getFullYear(); //Current Year
+    return (date + '/' + month + '/' + year);
 }
 
 function getDateTime() {
