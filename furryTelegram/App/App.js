@@ -63,7 +63,7 @@ export default class App extends React.Component {
       devMode: true,
       habits: [],
       goals: [],
-      devDate: new Date(2019,1, 1)
+      devDate: new Date(2019,0, 1)
     };
     this.initializeState().then(() => {
       this.setState({stateLoaded: true})
@@ -102,6 +102,12 @@ export default class App extends React.Component {
     this.setState({devDate: tomorrow})
   }
 
+  decrementDevDateCallback = () => {
+    var yesterday = this.state.devDate;
+    yesterday.setDate(yesterday.getDate() - 1);
+    this.setState({devDate: yesterday})
+  }
+
   componentDidUpdate = () => {
     _storeData('state', JSON.stringify({'habits':this.state.habits, 'goals':this.state.goals}))
   }
@@ -116,7 +122,8 @@ export default class App extends React.Component {
           'addNewGoalCallback':this.addNewGoalCallback,
           'devMode': this.state.devMode,
           'devDate': this.state.devDate,
-          'incrementDevDateCallback': this.incrementDevDateCallback
+          'incrementDevDateCallback': this.incrementDevDateCallback,
+          'decrementDevDateCallback': this.decrementDevDateCallback,
         }}
       />;
     }

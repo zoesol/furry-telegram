@@ -133,13 +133,18 @@ handleCloseDialog = () => {
     )
   }
 
-  addDateChangeComponent = () => {
+  addDateChangeComponents = () => {
     if(this.props.screenProps.devMode) {
       return (
         <View style={styles.dateChangeButton}>
           <Button
             title="Increment Date"
             onPress={this.props.screenProps.incrementDevDateCallback}
+            color='white'
+          />
+          <Button
+            title="Decrement Date"
+            onPress={this.props.screenProps.decrementDevDateCallback}
             color='white'
           />
         </View>
@@ -159,7 +164,7 @@ handleCloseDialog = () => {
     currDate = new Date()
    }
    var date =  currDate.getDate(); //Current Date
-   var month = currDate.getMonth(); //Current Month
+   var month = currDate.getMonth()+1; //Current Month
    var year = currDate.getFullYear(); //Current Year
    currDate = date + '/' + month + '/' + year
 
@@ -191,7 +196,7 @@ handleCloseDialog = () => {
       <View style={styles.homePage}>
         {this.addPageTitleComponent()}
         {this.addDateComponent()}
-        {this.addDateChangeComponent()}
+        {this.addDateChangeComponents()}
         {this.addNewHabitButtonComponent()}
         {this.addHabitButtonComponents()}
       </View>
