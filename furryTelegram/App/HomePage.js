@@ -133,11 +133,25 @@ handleCloseDialog = () => {
     )
   }
 
+  addDateChangeComponent = () => {
+    if(this.props.screenProps.devMode) {
+      return (
+        <View style={styles.dateChangeButton}>
+          <Button
+            title="Increment Date"
+            onPress={this.props.screenProps.incrementDevDateCallback}
+            color='white'
+          />
+        </View>
+      )
+    }
+  }
+
 
   /*
   * Creates a Text Component for today's date
   */
- addDateComponent = () => {
+  addDateComponent = () => {
    if (this.props.screenProps.devMode) {
     currDate = this.props.screenProps.devDate
    }
@@ -177,6 +191,7 @@ handleCloseDialog = () => {
       <View style={styles.homePage}>
         {this.addPageTitleComponent()}
         {this.addDateComponent()}
+        {this.addDateChangeComponent()}
         {this.addNewHabitButtonComponent()}
         {this.addHabitButtonComponents()}
       </View>
@@ -231,5 +246,12 @@ const styles = StyleSheet.create({
   },
   dateText: {
     top: '35%'
+  },
+  dateChangeButton: {
+    position: 'absolute',
+    top: '7%',
+    left: '70%',
+    backgroundColor:"purple",
+    width: '30%'
   }
 });
