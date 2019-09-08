@@ -4,7 +4,6 @@ import Dialog from 'react-native-dialog';
 
 export default class HomePage extends React.Component {
   constructor(props) {
-    console.log("Executing the Constructor")
     super(props);
     this.state = { 
       isDialogVisible: false,
@@ -19,7 +18,6 @@ export default class HomePage extends React.Component {
  *  Each Habit Button can be clicked to log the completion of that habit.
  */
   addHabitButtonComponents = () => {
-    console.log("Adding the Habit Button Components")
     return (
       <View style={styles.habitGroup}>
         {this.props.screenProps.habits.map((habit, i) => {
@@ -191,7 +189,6 @@ handleCloseDialog = () => {
 
   //React Render
   render() {
-    console.log("Rendering the HomePage")
     return (
       <View style={styles.homePage}>
         {this.addPageTitleComponent()}

@@ -32,6 +32,9 @@ export default function Habit(name, type, schedule, month_goal, minimum, history
           if (currSum >= this.minimum) {
             successes[currDate] = currSum
           }
+          if(prevDate == null) {
+            prevDate = currDate
+          }
         }
         else {
           currSum = 0.0
@@ -40,22 +43,37 @@ export default function Habit(name, type, schedule, month_goal, minimum, history
       })
       return successes
     }
+
     this.getProgress = function () {
+      today = this.getDate()
       if (this.type == "Continuous") {
-        return Math.round(Object.keys(this.getSuccessDays()).length*100.0/this.goal)/100;
+        history = this.getSuccessDays()
       }
       else if (this.type == "Binary") {
-        return Math.round(Object.keys(this.history).length*100.0/this.goal)/100;
+        history = this.history
       }
       else {
         console.log("Error in getProgress")
       }
+      numProgressDays = 0
+      today = today.toString().split("/")
+      Object.keys(history).map((date, i) => {
+        date = date.split("/")
+        if (date[2].split(' ')[0] < today[2] 
+        || (date[2].split(' ')[0] == today[2] && date[1] < today[1]) 
+        || (date[2].split(' ')[0] == today[2] && date[1] == today[1] && date[0] <= today[0])) {
+          numProgressDays += 1;
+        }
+      })
+      return Math.round(numProgressDays*100.0/this.goal)/100;
     }
+
     this.updateLog = function (logText, logInterval) {
       //Just uses random numer as key right now
       //In the future make this the current date and time
       this.history[this.getDateTime()] = [logText, parseFloat(logInterval)]
     };
+
     this.getProgressTowardsMinimum = function () {
       ret = -1
       if (this.type == "Continuous") {
@@ -78,18 +96,18 @@ export default function Habit(name, type, schedule, month_goal, minimum, history
         console.log("Error in getProgressTowardsMinimum")
       }
       return ret
-
     }
+
     this.minimum = minimum;
 
     this.getDate = function () {
       if (this.devMode) {
         currdate = this.devDate
-        console.log("DevMode Date:", currdate)
+        // console.log("DevMode Date:", currdate)
       }
       else {
         currdate = new Date()
-        console.log("Not DevMode Date:", currdate)
+        // console.log("Not DevMode Date:", currdate)
       }
       var date = currdate.getDate(); //Current Date
       var month = currdate.getMonth() + 1; //Current Month
