@@ -25,6 +25,11 @@ View Developer Tools as Normal on Remote Page
 Look at that console for console.logs.  
 <br>
 
+Resetting the Persistent Storage:  
+Two Options  
+(1) Delete the app in simulator and then rebuild from scratch  
+(2) Add the line 'useDefaults()' to the App.js constructor, run once, remove then line, then refresh  
+<br>
 
 # Notes
 
