@@ -82,6 +82,7 @@ export default class HomePage extends React.Component {
       <TextInput
         style={{backgroundColor: "orange", height:"10%", borderWidth: 1}}
         onChangeText={(inputText)=> this.handleHabitLogIntervalInput(inputText)}
+        keyboardType='numeric'
       />
       <Text> Log </Text>
       <TextInput
