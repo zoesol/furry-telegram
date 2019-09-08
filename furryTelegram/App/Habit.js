@@ -11,6 +11,16 @@ export default function Habit(name, type, schedule, month_goal, minimum, history
     this.schedule = constructSchedule(schedule);
     this.goal = month_goal;
 
+    this.devMode = null
+    this.devDate = null
+
+    this.updateMode = (mode, date) => {
+      this.devMode = mode
+      if (mode) {
+        this.devDate = date
+      }
+    }
+
     this.getSuccessDays = function () {
       currSum = 0.0
       prevDate = null
@@ -44,14 +54,14 @@ export default function Habit(name, type, schedule, month_goal, minimum, history
     this.updateLog = function (logText, logInterval) {
       //Just uses random numer as key right now
       //In the future make this the current date and time
-      this.history[getDateTime()] = [logText, parseFloat(logInterval)]
+      this.history[this.getDateTime()] = [logText, parseFloat(logInterval)]
     };
     this.getProgressTowardsMinimum = function () {
       ret = -1
       if (this.type == "Continuous") {
         progressSum = 0.0
         Object.keys(this.history).map((dateTime) => {
-          if (dateTime.split(" ")[0] == getDate()) {
+          if (dateTime.split(" ")[0] == this.getDate()) {
             progressSum += this.history[dateTime][1]
           }
         })
@@ -59,7 +69,7 @@ export default function Habit(name, type, schedule, month_goal, minimum, history
       }
       else if (this.type == "Binary") {
         Object.keys(this.history).map((dateTime) => {
-          if (dateTime.split(" ")[0] == getDate()) {
+          if (dateTime.split(" ")[0] == this.getDate()) {
             ret =  1.0;
           }
         })
@@ -71,30 +81,27 @@ export default function Habit(name, type, schedule, month_goal, minimum, history
 
     }
     this.minimum = minimum;
+
+    this.getDate = function () {
+      if (this.devMode) {
+        currdate = this.devDate
+      }
+      else {
+        currdate = new Date()
+      }
+      var date = currdate.getDate(); //Current Date
+      var month = currdate.getMonth() + 1; //Current Month
+      var year = currdate.getFullYear(); //Current Year
+      return (date + '/' + month + '/' + year);
+    }
+
+    this.getDateTime = function () {
+      var hours = new Date().getHours(); //Current Hours
+      var min = new Date().getMinutes(); //Current Minutes
+      var sec = new Date().getSeconds(); //Current Seconds
+      return (this.getDate() + ' ' + hours + ':' + min + ':' + sec);
+    }
   };
-
-function getDate() {
-  if (devMode) {
-    date = this.props.screenProps.devDate
-  }
-  else {
-    date = new Date()
-  }
-    var date = date.getDate(); //Current Date
-    var month = date.getMonth() + 1; //Current Month
-    var year = date.getFullYear(); //Current Year
-    return (date + '/' + month + '/' + year);
-}
-
-function getDateTime() {
-  var date = new Date().getDate(); //Current Date
-  var month = new Date().getMonth() + 1; //Current Month
-  var year = new Date().getFullYear(); //Current Year
-  var hours = new Date().getHours(); //Current Hours
-  var min = new Date().getMinutes(); //Current Minutes
-  var sec = new Date().getSeconds(); //Current Seconds
-  return (getDate() + ' ' + hours + ':' + min + ':' + sec);
-}
 
 const DAY_OF_WEEK = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 function constructSchedule(days) {

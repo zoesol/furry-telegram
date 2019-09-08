@@ -48,6 +48,7 @@ defaultData = {
      "Start in front splits, rotate to middle splits, and end in the other side splits!", 
       "10/20/20"),
   ],
+  'devDate': new Date(2019, 0, 0)
 }
 
 useDefaults = () => {
@@ -60,10 +61,10 @@ export default class App extends React.Component {
     super(props);
     this.state = { 
       stateLoaded: false,
-      devMode: true,
+      devMode: false,
       habits: [],
       goals: [],
-      devDate: new Date(2019,0, 1)
+      devDate:  null
     };
     this.initializeState().then(() => {
       this.setState({stateLoaded: true})
@@ -73,6 +74,7 @@ export default class App extends React.Component {
   initializeState = async () => {
     return AsyncStorage.getItem('state').then((value) => {
       stateData = JSON.parse(value)
+      console.log("This is the raw stateData", stateData)
       habits = []
       stateData['habits'].map((raw_habit, i) => {
         habits.push(new Habit(raw_habit.habit_name, raw_habit.type, raw_habit.schedule, raw_habit.goal, raw_habit.minimum, raw_habit.history))
@@ -81,16 +83,24 @@ export default class App extends React.Component {
       stateData['goals'].map((raw_goal, i) => {
         goals.push(new LongTermGoal(raw_goal.goal_name, raw_goal.description, raw_goal.end_date))
       })
-      this.setState({habits: habits, goals: goals})
+      year_month = stateData['devDate'].split('-')
+      day = year_month[2].split('T')
+      hour_min = day[1].split(':')
+      secs = hour_min[2].split('.')
+      devDate = new Date(year_month[0], year_month[1]-1, day[0], hour_min[0], hour_min[1], secs[0])
+      this.setState({habits: habits, goals: goals, devDate: devDate})
     })
   }
 
-  addNewHabitCallback = async (newHabit) => {
+  addNewHabitCallback = (newHabit) => {
     this.setState(previousState => ({ 
       habits: [...previousState.habits, newHabit]
     }))  
   }
-  addNewGoalCallback = async (newGoal) => {
+  updateHabitsCallback = (updatedHabits) => {
+    this.setState({habits: updatedHabits})
+  }
+  addNewGoalCallback = (newGoal) => {
     this.setState(previousState => ({ 
       goals: [...previousState.goals, newGoal]
     }))  
@@ -109,7 +119,11 @@ export default class App extends React.Component {
   }
 
   componentDidUpdate = () => {
-    _storeData('state', JSON.stringify({'habits':this.state.habits, 'goals':this.state.goals}))
+    this.state.habits.map((habit, i) => {
+      habit.updateMode(this.devMode, this.devDate)
+    })
+    console.log("This is the state after", this.state)
+    _storeData('state', JSON.stringify({'habits':this.state.habits, 'goals':this.state.goals, 'devDate':this.state.devDate}))
   }
 
   render() {
@@ -118,6 +132,7 @@ export default class App extends React.Component {
         screenProps = {{
           'habits':this.state.habits, 
           'addNewHabitCallback':this.addNewHabitCallback,
+          'updateHabitsCallback':this.updateHabitsCallback,
           'goals':this.state.goals,
           'addNewGoalCallback':this.addNewGoalCallback,
           'devMode': this.state.devMode,

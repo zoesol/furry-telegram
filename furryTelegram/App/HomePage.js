@@ -105,9 +105,9 @@ handleSubmitDialog = () => {
     let newPressStatus = previousState.pressStatus;
     newPressStatus[this.state.lastPressed] = this.props.screenProps.habits[this.state.lastPressed].getProgressTowardsMinimum();
     return {pressStatus: newPressStatus}
-    }
+    }, this.props.screenProps.updateHabitsCallback(this.props.screenProps.habits)
   )
-  this.setState({isDialogVisible: false, logText: "", logInterval: 0})
+  this.setState({isDialogVisible: false, logText: "", logInterval: 0}) 
 }
 
 handleCloseDialog = () => {
@@ -188,6 +188,14 @@ handleCloseDialog = () => {
         </Text>
       </View>
     )
+  }
+
+  componentDidMount = () => {
+    newPressStatus = []
+    this.props.screenProps.habits.map((habit, i) => {
+      newPressStatus.push(habit.getProgressTowardsMinimum())
+    })
+    this.setState({pressStatus: newPressStatus})
   }
 
   //React Render
