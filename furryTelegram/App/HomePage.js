@@ -4,10 +4,10 @@ import Dialog from 'react-native-dialog';
 
 export default class HomePage extends React.Component {
   constructor(props) {
+    console.log("Executing the Constructor")
     super(props);
     this.state = { 
       isDialogVisible: false,
-      pressStatus: Array.from(7, (_, i) => 0),
       lastPressed: 0,
       logText: "",
       logInterval: 0,
@@ -19,14 +19,16 @@ export default class HomePage extends React.Component {
  *  Each Habit Button can be clicked to log the completion of that habit.
  */
   addHabitButtonComponents = () => {
+    console.log("Adding the Habit Button Components")
     return (
       <View style={styles.habitGroup}>
         {this.props.screenProps.habits.map((habit, i) => {
           bWidth = 0
           backcolor = `#07d400`;
-          if (this.state.pressStatus[i]) {
-            backcolor = `#07d4${Math.min(Math.ceil(this.state.pressStatus[i] * 255), 255).toString(16)}`;
-            if (this.state.pressStatus[i] >= 1.0) {
+          progress = habit.getProgressTowardsMinimum()
+          if (progress > 0.0) {
+            backcolor = `#07d4${Math.min(Math.ceil(progress * 255), 255).toString(16)}`;
+            if (progress >= 1.0) {
               bWidth = 1
             }
           }
@@ -49,7 +51,8 @@ export default class HomePage extends React.Component {
   }
 
   handleHabitButtonClick = (i) => {
-    if (this.props.screenProps.habits[i].type == "Continuous" || this.state.pressStatus[i] < 1.0 || !this.state.pressStatus[i]) {
+    habit = this.props.screenProps.habits[i]
+    if (habit.type == "Continuous" || habit.getProgressTowardsMinimum() < 1.0) {
       this.setState({
         isDialogVisible: true,
         lastPressed: i
@@ -100,13 +103,6 @@ handleHabitLogTextInput = (inputText) => {
 
 handleSubmitDialog = () => {
   this.props.screenProps.habits[this.state.lastPressed].updateLog(this.state.logText, this.state.logInterval)
-
-  this.setState((previousState) => {
-    let newPressStatus = previousState.pressStatus;
-    newPressStatus[this.state.lastPressed] = this.props.screenProps.habits[this.state.lastPressed].getProgressTowardsMinimum();
-    return {pressStatus: newPressStatus}
-    }, this.props.screenProps.updateHabitsCallback(this.props.screenProps.habits)
-  )
   this.setState({isDialogVisible: false, logText: "", logInterval: 0}) 
 }
 
@@ -191,15 +187,11 @@ handleCloseDialog = () => {
   }
 
   componentDidMount = () => {
-    newPressStatus = []
-    this.props.screenProps.habits.map((habit, i) => {
-      newPressStatus.push(habit.getProgressTowardsMinimum())
-    })
-    this.setState({pressStatus: newPressStatus})
   }
 
   //React Render
   render() {
+    console.log("Rendering the HomePage")
     return (
       <View style={styles.homePage}>
         {this.addPageTitleComponent()}

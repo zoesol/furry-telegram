@@ -61,11 +61,12 @@ export default class App extends React.Component {
     super(props);
     this.state = { 
       stateLoaded: false,
-      devMode: false,
+      devMode: true,
       habits: [],
       goals: [],
       devDate:  null
     };
+    // useDefaults()
     this.initializeState().then(() => {
       this.setState({stateLoaded: true})
     })
@@ -97,9 +98,6 @@ export default class App extends React.Component {
       habits: [...previousState.habits, newHabit]
     }))  
   }
-  updateHabitsCallback = (updatedHabits) => {
-    this.setState({habits: updatedHabits})
-  }
   addNewGoalCallback = (newGoal) => {
     this.setState(previousState => ({ 
       goals: [...previousState.goals, newGoal]
@@ -120,7 +118,7 @@ export default class App extends React.Component {
 
   componentDidUpdate = () => {
     this.state.habits.map((habit, i) => {
-      habit.updateMode(this.devMode, this.devDate)
+      habit.updateMode(this.state.devMode, this.state.devDate)
     })
     console.log("This is the state after", this.state)
     _storeData('state', JSON.stringify({'habits':this.state.habits, 'goals':this.state.goals, 'devDate':this.state.devDate}))
@@ -132,7 +130,6 @@ export default class App extends React.Component {
         screenProps = {{
           'habits':this.state.habits, 
           'addNewHabitCallback':this.addNewHabitCallback,
-          'updateHabitsCallback':this.updateHabitsCallback,
           'goals':this.state.goals,
           'addNewGoalCallback':this.addNewGoalCallback,
           'devMode': this.state.devMode,

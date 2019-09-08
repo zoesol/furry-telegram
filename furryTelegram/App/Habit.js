@@ -85,9 +85,11 @@ export default function Habit(name, type, schedule, month_goal, minimum, history
     this.getDate = function () {
       if (this.devMode) {
         currdate = this.devDate
+        console.log("DevMode Date:", currdate)
       }
       else {
         currdate = new Date()
+        console.log("Not DevMode Date:", currdate)
       }
       var date = currdate.getDate(); //Current Date
       var month = currdate.getMonth() + 1; //Current Month
