@@ -75,7 +75,6 @@ export default class App extends React.Component {
   initializeState = async () => {
     return AsyncStorage.getItem('state').then((value) => {
       stateData = JSON.parse(value)
-      console.log("This is the raw stateData", stateData)
       habits = []
       stateData['habits'].map((raw_habit, i) => {
         habits.push(new Habit(raw_habit.habit_name, raw_habit.type, raw_habit.schedule, raw_habit.goal, raw_habit.minimum, raw_habit.history))
@@ -120,7 +119,6 @@ export default class App extends React.Component {
     this.state.habits.map((habit, i) => {
       habit.updateMode(this.state.devMode, this.state.devDate)
     })
-    console.log("This is the state after", this.state)
     _storeData('state', JSON.stringify({'habits':this.state.habits, 'goals':this.state.goals, 'devDate':this.state.devDate}))
   }
 
@@ -150,6 +148,8 @@ export default class App extends React.Component {
     }
   }
 }
+
+console.disableYellowBox = true;
 
 const TabNavigator = createBottomTabNavigator(
   {

@@ -27,7 +27,7 @@ export default class HabitListPage extends React.Component {
       return (
           <View style={styles.habitList}>
             {habits.map((habit, i) => {
-                return (this.addHabitTabComponent(habit))
+                return (this.addHabitTabComponent(habit, i))
             })}
             {this.addNewHabitButtonComponent()}
           </View>
@@ -37,7 +37,7 @@ export default class HabitListPage extends React.Component {
 
   addHabitTabComponent = (habit) => {
     return (
-        <View style={styles.habitTab}>
+        <View key={i} style={styles.habitTab}>
             <Button style
                 title = {habit.habit_name}
                 onPress = {() => this.props.navigation.navigate('HabitDetail', {

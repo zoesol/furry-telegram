@@ -1,6 +1,8 @@
 import React from 'react';
 import { StyleSheet, Button, Text, View, YellowBox } from 'react-native';
 import Dialog from 'react-native-dialog';
+import Modal from "react-native-modal"
+import { TextInput } from 'react-native-gesture-handler';
 
 export default class HomePage extends React.Component {
   constructor(props) {
@@ -43,7 +45,8 @@ export default class HomePage extends React.Component {
             </View>
           )
         })}
-        {this.addDiaglogInputComponent()}
+        {/* {this.addDiaglogInputComponent()} */}
+        {this.addModalInputCompnent()}
       </View>
     )
   }
@@ -56,6 +59,71 @@ export default class HomePage extends React.Component {
         lastPressed: i
       })
     }
+  }
+
+  addBinaryInputComponent = () => {
+    return (
+      <View style={{top:'8%', backgroundColor: 'grey', height: '40%', width:'85%'}}>
+      <Text> Log </Text>
+      <TextInput
+        style={{backgroundColor: "orange", height:"100%", borderWidth: 1}}
+        multiline
+        numberOfLines = {5}
+        onChangeText={(inputText)=> this.handleHabitLogTextInput(inputText)}
+      />
+    </View>
+    )
+  }
+
+  addContinuousInputComponent = () => {
+    return (
+      <View style={{top:'8%', backgroundColor: 'grey', height: '60%', width:'85%'}}>
+      <Text> Interval </Text>
+      <TextInput
+        style={{backgroundColor: "orange", height:"10%", borderWidth: 1}}
+        onChangeText={(inputText)=> this.handleHabitLogIntervalInput(inputText)}
+      />
+      <Text> Log </Text>
+      <TextInput
+        style={{backgroundColor: "orange", height:"70%", borderWidth: 1}}
+        multiline
+        numberOfLines = {5}
+        onChangeText={(inputText)=> this.handleHabitLogTextInput(inputText)}
+      />
+    </View>
+    )
+  }
+
+  addModalInputCompnent = () => {
+    let dialogTitle = `${this.props.screenProps.habits[this.state.lastPressed].habit_name} Log`
+    if (this.props.screenProps.habits[this.state.lastPressed].type == "Continuous") {
+      createInputComponentFunc = this.addContinuousInputComponent
+      submitHeight = '10%'
+    }
+    else if (this.props.screenProps.habits[this.state.lastPressed].type == "Binary") {
+      createInputComponentFunc = this.addBinaryInputComponent
+      submitHeight = '20%'
+    }
+    return (
+      <Modal 
+      isVisible={this.state.isDialogVisible}
+      onBackdropPress={this.handleCloseDialog}
+      >
+        <View style={{ flex: 1, top: '30%', alignItems: 'center' }}>
+          <View style={styles.modalInputBox}> 
+            <Text>{dialogTitle} </Text>
+            {createInputComponentFunc()}
+            <View style={{backgroundColor: 'grey', top: submitHeight}}>
+            <Button
+              title="Submit"
+              onPress={() => this.handleSubmitDialog(this.state.logText)}
+              color='black'
+            />
+            </View>
+          </View>
+        </View>
+      </Modal>
+    )
   }
 
  /*
@@ -255,5 +323,11 @@ const styles = StyleSheet.create({
     left: '70%',
     backgroundColor:"purple",
     width: '30%'
+  },
+  modalInputBox: {
+    height: '40%',
+    width: '75%',
+    backgroundColor: 'white',
+    alignItems: 'center'
   }
 });
