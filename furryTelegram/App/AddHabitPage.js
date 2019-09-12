@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, TextInput, Button, View, Picker } from 'react-native';
+import { StyleSheet, TextInput, Button, View} from 'react-native';
 import Habit from './Habit';
 
 /*
@@ -17,6 +17,8 @@ export default class AddHabitPage extends React.Component {
             'newSchedule': new Array(7).fill(false)
         };
     }
+
+    // addScheduleTypeButtonComponent
 
     handleFixedScheduleButtonClick = (i) => {
         currSchedule = this.state.newSchedule
@@ -41,19 +43,30 @@ export default class AddHabitPage extends React.Component {
         )
     }
 
+    handleScheduleTypeButtonClick = (i) => {
+        if (i == 0) {
+            this.setState({type: "Binary"})
+        }
+        else if (i == 1) {
+            this.setState({type: "Continuous"})
+        }
+    }
+
     addHabitTypePickerComponent = () => {
         return (
-            <View style={styles.habitTypePicker}>
-            <Picker
-                selectedValue={this.state.type}
-                style={{height: 20, width: 100}}
-                onValueChange={(itemValue, itemIndex) => {
-                    this.setState({type: itemValue})
-                }
-                }>
-                <Picker.Item label="Binary" value="Binary" />
-                <Picker.Item label="Continuous" value="Continuous" />
-            </Picker>
+            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', margin: 15}}>
+                <View style={[styles.bigButton, this.state.type == "Binary" ? styles.pressedButton : styles.unpressedButton]}>
+                    <Button 
+                        title = 'Binary'
+                        onPress = {() => this.handleScheduleTypeButtonClick(0)}
+                    />
+                </View>
+                <View style={[styles.bigButton, this.state.type == "Continuous" ? styles.pressedButton : styles.unpressedButton]}>
+                    <Button 
+                        title = 'Continuous'
+                        onPress = {() => this.handleScheduleTypeButtonClick(1)}
+                    />
+                </View>
             </View>
         )
     }
@@ -165,6 +178,10 @@ const styles = StyleSheet.create({
     button: {
         height: 50,
         width: 50
+    },
+    bigButton: {
+        height: 50,
+        width: 125,
     },
     pressedButton: {
         backgroundColor: 'purple'
