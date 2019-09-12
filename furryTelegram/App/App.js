@@ -11,6 +11,7 @@ import Habit from './Habit';
 import LongTermGoal from './LongTermGoal';
 import AsyncStorage from '@react-native-community/async-storage';
 import { StyleSheet, Button, Text, View } from 'react-native';
+import { Provider as PaperProvider } from 'react-native-paper';
 
 _storeData = async (key, value) => {
   try {
@@ -83,7 +84,6 @@ export default class App extends React.Component {
       stateData['goals'].map((raw_goal, i) => {
         goals.push(new LongTermGoal(raw_goal.goal_name, raw_goal.description, raw_goal.end_date))
       })
-      console.log('devDate from storage:',stateData['devDate'])
       year_month = stateData['devDate'].split('-')
       day = year_month[2].split('T')
       hour_min = day[1].split(':')
@@ -91,9 +91,8 @@ export default class App extends React.Component {
       if (year_month[0].substring(0, 1) == '"') {
         year_month[0] = year_month[0].substring(1)
       }
-      console.log(year_month[0], year_month[1]-1, day[0], hour_min[0], hour_min[1], secs[0])
       devDate = new Date(year_month[0], year_month[1]-1, day[0], hour_min[0], hour_min[1], secs[0])
-      console.log("devDate:", devDate)
+      console.log("DevDate from Storage", devDate)
       this.setState({habits: habits, goals: goals, devDate: devDate})
     })
   }
@@ -110,14 +109,12 @@ export default class App extends React.Component {
   }
 
   incrementDevDateCallback = () => {
-    console.log("Increment devDate")
     var tomorrow = this.state.devDate;
     tomorrow.setDate(tomorrow.getDate() + 1);
     this.setState({devDate: tomorrow})
   }
 
   decrementDevDateCallback = () => {   
-    console.log("Decrement devDate") 
     var yesterday = this.state.devDate;
     yesterday.setDate(yesterday.getDate() - 1);
     this.setState({devDate: yesterday})
@@ -127,13 +124,13 @@ export default class App extends React.Component {
     this.state.habits.map((habit, i) => {
       habit.updateMode(this.state.devMode, this.state.devDate)
     })
-    console.log('devDate pre-storag', this.state.devDate)
-    console.log('JSON devDate', JSON.stringify(this.state.devDate))
     var date = this.state.devDate
-    var utcDate = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes()))
-    var result = JSON.stringify(utcDate);
-    console.log(result)
-    _storeData('state', JSON.stringify({'habits':this.state.habits, 'goals':this.state.goals, 'devDate':result}))
+    console.log("Date", date)
+    if (this.state.stateLoaded) {
+      var utcDate = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes()))
+      var result = JSON.stringify(utcDate);
+      _storeData('state', JSON.stringify({'habits':this.state.habits, 'goals':this.state.goals, 'devDate':result}))
+    }
   }
 
   render() {

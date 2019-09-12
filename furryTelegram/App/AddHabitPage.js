@@ -13,8 +13,32 @@ export default class AddHabitPage extends React.Component {
             'schedule': {},
             'goal': 0,
             'minimum': 0,
-            'type': 'Binary'
+            'type': 'Binary',
+            'newSchedule': new Array(7).fill(false)
         };
+    }
+
+    handleFixedScheduleButtonClick = (i) => {
+        currSchedule = this.state.newSchedule
+        currSchedule[i] = !currSchedule[i]
+        this.setState({newSchedule: currSchedule})
+    }
+
+    addFixedScheduleButtonComponents = () => {
+        return (
+            <View style={{flex: 1, flexDirection: 'row'}}>
+                {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day_of_week, i) => {
+                    return (
+                        <View key={i} style={[styles.button, this.state.newSchedule[i] ? styles.pressedButton : styles.unpressedButton]}>
+                            <Button
+                                title = {day_of_week}
+                                onPress = {() => this.handleFixedScheduleButtonClick(i)}
+                            />
+                        </View>
+                    )
+                })}
+            </View>
+        )
     }
 
     addHabitTypePickerComponent = () => {
@@ -40,9 +64,10 @@ export default class AddHabitPage extends React.Component {
 
     addTextInputComponents = () => {
         return (
-            <View>
+            <View style={{position: 'absolute', top: 200}}>
                 {this.addTextInputComponent("Habit Name", this.handleNameInput)}
                 {this.addTextInputComponent("Schedule", this.handleScheduleInput)}
+                {this.addFixedScheduleButtonComponents()}
                 {this.addTextInputComponent("Goal", this.handleGoalInput)}
                 {this.addTextInputComponent("Minimum", this.handleMinimumInput)}
             </View>
@@ -86,7 +111,7 @@ export default class AddHabitPage extends React.Component {
     */
     addSubmitButtonComponent = () => {
         return (
-            <View>
+            <View style={{position: 'absolute', top: 600}}>
                 <Button
                     title="Submit"
                     onPress={this.handleSubmitButtonPress}
@@ -135,7 +160,16 @@ const styles = StyleSheet.create({
     },
     habitTypePicker: {
         height: '40%',
-        width: '100%',
-        
+        width: '100%',    
     },
+    button: {
+        height: 50,
+        width: 50
+    },
+    pressedButton: {
+        backgroundColor: 'purple'
+    },
+    unpressedButton: {
+        backgroundColor: 'grey'
+    }
  })
