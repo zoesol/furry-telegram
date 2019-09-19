@@ -67,7 +67,7 @@ export default class App extends React.Component {
       goals: [],
       devDate:  null
     };
-    // useDefaults()
+    useDefaults()
     this.initializeState().then(() => {
       this.setState({stateLoaded: true})
     })
