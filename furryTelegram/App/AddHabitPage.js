@@ -10,28 +10,92 @@ export default class AddHabitPage extends React.Component {
         super(props);
         this.state = {
             'name': '',
-            'schedule': {},
             'goal': 0,
             'minimum': 0,
             'type': 'Binary',
-            'newSchedule': new Array(7).fill(false)
+            'schedule': new Array(7).fill(false),
+            'scheduleType': 'Fixed',
+            'goalRange': "Weekly"
         };
     }
 
-    // addScheduleTypeButtonComponent
+    handleGoalRangeButtonClick = (i) => {
+        if (i == 0) {
+            this.setState({goalRange: "Weekly"})
+        }
+        else if (i == 1) {
+            this.setState({goalRange: "Monthly"})
+        }
+        else if (i == 2) {
+            this.setState({goalRange: "Annual"})
+        }
+    }
+
+    addGoalRangeButtonComponents = () => {
+        return (
+            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                <View style={[styles.bigButton, this.state.goalRange == "Weekly" ? styles.pressedButton : styles.unpressedButton]}>
+                    <Button 
+                        title = 'Weekly'
+                        onPress = {() => this.handleGoalRangeButtonClick(0)}
+                    />
+                </View>
+                <View style={[styles.bigButton, this.state.goalRange == "Monthly" ? styles.pressedButton : styles.unpressedButton]}>
+                    <Button 
+                        title = 'Monthly'
+                        onPress = {() => this.handleGoalRangeButtonClick(1)}
+                    />
+                </View>
+                <View style={[styles.bigButton, this.state.goalRange == "Annual" ? styles.pressedButton : styles.unpressedButton]}>
+                    <Button 
+                        title = 'Annual'
+                        onPress = {() => this.handleGoalRangeButtonClick(2)}
+                    />
+                </View>
+            </View>
+        )
+    }
+
+    handleScheduleTypeButtonClick = (i) => {
+        if (i == 0) {
+            this.setState({scheduleType: "Fixed"})
+        }
+        else if (i == 1) {
+            this.setState({scheduleType: "Flexible"})
+        }
+    }
+
+    addScheduleTypeButtonComponents = () => {
+        return (
+            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', margin: 15}}>
+                <View style={[styles.bigButton, this.state.scheduleType == "Fixed" ? styles.pressedButton : styles.unpressedButton]}>
+                    <Button 
+                        title = 'Fixed'
+                        onPress = {() => this.handleScheduleTypeButtonClick(0)}
+                    />
+                </View>
+                <View style={[styles.bigButton, this.state.scheduleType == "Flexible" ? styles.pressedButton : styles.unpressedButton]}>
+                    <Button 
+                        title = 'Flexible'
+                        onPress = {() => this.handleScheduleTypeButtonClick(1)}
+                    />
+                </View>
+            </View>
+        )
+    }
 
     handleFixedScheduleButtonClick = (i) => {
-        currSchedule = this.state.newSchedule
+        currSchedule = this.state.schedule
         currSchedule[i] = !currSchedule[i]
         this.setState({newSchedule: currSchedule})
     }
 
     addFixedScheduleButtonComponents = () => {
         return (
-            <View style={{flex: 1, flexDirection: 'row'}}>
+            <View style={[this.state.scheduleType == "Fixed" ? {flex: 1, flexDirection: 'row'} : {display: 'none'}]}>
                 {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day_of_week, i) => {
                     return (
-                        <View key={i} style={[styles.button, this.state.newSchedule[i] ? styles.pressedButton : styles.unpressedButton]}>
+                        <View key={i} style={[styles.button, this.state.schedule[i] ? styles.pressedButton : styles.unpressedButton]}>
                             <Button
                                 title = {day_of_week}
                                 onPress = {() => this.handleFixedScheduleButtonClick(i)}
@@ -43,7 +107,7 @@ export default class AddHabitPage extends React.Component {
         )
     }
 
-    handleScheduleTypeButtonClick = (i) => {
+    handleHabitTypeButtonClick = (i) => {
         if (i == 0) {
             this.setState({type: "Binary"})
         }
@@ -58,13 +122,13 @@ export default class AddHabitPage extends React.Component {
                 <View style={[styles.bigButton, this.state.type == "Binary" ? styles.pressedButton : styles.unpressedButton]}>
                     <Button 
                         title = 'Binary'
-                        onPress = {() => this.handleScheduleTypeButtonClick(0)}
+                        onPress = {() => this.handleHabitTypeButtonClick(0)}
                     />
                 </View>
                 <View style={[styles.bigButton, this.state.type == "Continuous" ? styles.pressedButton : styles.unpressedButton]}>
                     <Button 
                         title = 'Continuous'
-                        onPress = {() => this.handleScheduleTypeButtonClick(1)}
+                        onPress = {() => this.handleHabitTypeButtonClick(1)}
                     />
                 </View>
             </View>
@@ -77,11 +141,12 @@ export default class AddHabitPage extends React.Component {
 
     addTextInputComponents = () => {
         return (
-            <View style={{position: 'absolute', top: 200}}>
+            <View style={{position: 'absolute', top: 125}}>
                 {this.addTextInputComponent("Habit Name", this.handleNameInput)}
-                {this.addTextInputComponent("Schedule", this.handleScheduleInput)}
+                {this.addScheduleTypeButtonComponents()}
                 {this.addFixedScheduleButtonComponents()}
                 {this.addTextInputComponent("Goal", this.handleGoalInput)}
+                {this.addGoalRangeButtonComponents()}
                 {this.addTextInputComponent("Minimum", this.handleMinimumInput)}
             </View>
         )
@@ -101,11 +166,6 @@ export default class AddHabitPage extends React.Component {
     handleNameInput = (inputText) => {
         this.setState({
             name: inputText
-        })
-    }
-    handleScheduleInput = (inputText) => {
-        this.setState({
-            schedule: inputText
         })
     }
     handleGoalInput = (inputText) => {
@@ -136,7 +196,10 @@ export default class AddHabitPage extends React.Component {
     handleSubmitButtonPress = () => {
         const addNewHabit = this.props.navigation.getParam('addHabitCallback', () => {})
         const src = this.props.navigation.getParam('src', () => {})
-        addNewHabit(new Habit(this.state.name, this.state.type, this.state.schedule, this.state.goal, this.state.minimum, {}))
+        if (this.state.scheduleType) {
+            this.state.schedule = {}
+        }
+        addNewHabit(new Habit(this.state.name, this.state.type, this.state.schedule, this.state.goal, this.state.minimum, this.state.goalRange, {}))
         this.props.navigation.navigate(src)
     }
       

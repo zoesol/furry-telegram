@@ -34,10 +34,10 @@ _retrieveData = async (key) => {
 
 defaultData = {
   "habits": [
-      new Habit("Stretch", "Continuous", {}, 30, 60, {}),
-      new Habit("Yoga", "Binary", {"Monday": "Evening", "Wednesday": "Afternoon", "Friday": "Evening"}, 15, null, {}),
-      new Habit("Prehab", "Binary", {}, 30, null, {}),
-      new Habit("Water", "Continuous", {}, 30, 1, {}),
+      new Habit("Stretch", "Continuous", {}, 30, 60, 'Weekly', {}),
+      new Habit("Yoga", "Binary", {"Monday": "Evening", "Wednesday": "Afternoon", "Friday": "Evening"}, 15, null, 'Monthly', {}),
+      new Habit("Prehab", "Binary", {}, 30, null, 'Weekly', {}),
+      new Habit("Water", "Continuous", {}, 30, 1, 'Weekly', {}),
   ],
   "goals": [
     new LongTermGoal(
@@ -53,6 +53,7 @@ defaultData = {
 }
 
 useDefaults = () => {
+  console.log('Using the defaults')
   _storeData('state', JSON.stringify(defaultData))
 }
 
@@ -67,7 +68,7 @@ export default class App extends React.Component {
       goals: [],
       devDate:  null
     };
-    // useDefaults()
+    useDefaults()
     this.initializeState().then(() => {
       this.setState({stateLoaded: true})
     })
@@ -78,7 +79,8 @@ export default class App extends React.Component {
       stateData = JSON.parse(value)
       habits = []
       stateData['habits'].map((raw_habit, i) => {
-        habits.push(new Habit(raw_habit.habit_name, raw_habit.type, raw_habit.schedule, raw_habit.goal, raw_habit.minimum, raw_habit.history))
+        console.log(raw_habit)
+        habits.push(new Habit(raw_habit.habit_name, raw_habit.type, raw_habit.schedule, raw_habit.goal, raw_habit.minimum, raw_habit.goalRange, raw_habit.history))
       })
       goals = []
       stateData['goals'].map((raw_goal, i) => {
@@ -99,9 +101,10 @@ export default class App extends React.Component {
 
   addNewHabitCallback = (newHabit) => {
     this.setState(previousState => ({ 
-      habits: [...previousState.habits, newHabit]
-    }))  
+      habits : [...previousState.habits, newHabit]
+    }))
   }
+
   addNewGoalCallback = (newGoal) => {
     this.setState(previousState => ({ 
       goals: [...previousState.goals, newGoal]
@@ -121,11 +124,11 @@ export default class App extends React.Component {
   }
 
   componentDidUpdate = () => {
+    console.log("Component Did Update", this.state.habits)
     this.state.habits.map((habit, i) => {
       habit.updateMode(this.state.devMode, this.state.devDate)
     })
     var date = this.state.devDate
-    console.log("Date", date)
     if (this.state.stateLoaded) {
       var utcDate = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes()))
       var result = JSON.stringify(utcDate);

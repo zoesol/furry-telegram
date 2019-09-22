@@ -1,7 +1,7 @@
 /*
 * Object: Habit
 */
-export default function Habit(name, type, schedule, month_goal, minimum, history) {
+export default function Habit(name, type, schedule, goal, minimum, goalRange, history) {
     this.habit_name = name;
     //Binary or Continuous
     this.type = type;
@@ -9,7 +9,8 @@ export default function Habit(name, type, schedule, month_goal, minimum, history
     //A map of the day of week to time of day the activity has to be complete
     // Value is 'X' if the activity is not scheudled for that day of the week
     this.schedule = constructSchedule(schedule);
-    this.goal = month_goal;
+    this.goal = goal;
+    this.goalRange = goalRange;
 
     this.devMode = null
     this.devDate = null
@@ -128,11 +129,11 @@ function constructSchedule(days) {
   let noSchedule = (Object.keys(days).length == 0);
   let schedule = {}
   DAY_OF_WEEK.map((day, i) => {
-    //If a plan is specified that just blank initialize
+    //Assume habit is to be done everyday at anytime
     if (noSchedule) {
       schedule[day] = "Anytime"
     }
-    //Else assume habit is to be done everyday at anytime
+    //Else a plan is specified that just blank initialize
     else {
       schedule[day] = "X"
     }
