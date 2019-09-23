@@ -9,6 +9,7 @@ import HabitDetailPage from './HabitDetailPage';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import Habit from './Habit';
 import LongTermGoal from './LongTermGoal';
+import CalendarPage from './CalendarPage';
 import AsyncStorage from '@react-native-community/async-storage';
 import { StyleSheet, Button, Text, View } from 'react-native';
 import { Provider as PaperProvider } from 'react-native-paper';
@@ -158,7 +159,6 @@ export default class App extends React.Component {
   }
 
   componentDidUpdate = () => {
-    console.log("Component Did Update", this.state.habits)
     this.state.habits.map((habit, i) => {
       habit.updateMode(this.state.devMode, this.state.devDate)
     })
@@ -217,6 +217,12 @@ const TabNavigator = createBottomTabNavigator(
       screen: LTGoalsPage,
       navigationOptions: {
         headerTitle: 'Goals'
+      }
+    },
+    Calendar: {
+      screen: CalendarPage,
+      navigationOptions: {
+        headerTitle: 'Calendar'
       }
     }
   }
