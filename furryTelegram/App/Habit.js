@@ -28,17 +28,15 @@ export default function Habit(name, type, schedule, goal, minimum, goalRange, hi
       successes = {}
       Object.keys(this.history).sort().map((dateTime) => {
         currDate = dateTime.split(" ")[0]
-        if (currDate == prevDate || prevDate == null) {
-          currSum += this.history[dateTime][1]
-          if (currSum >= this.minimum) {
-            successes[currDate] = currSum
-          }
-          if(prevDate == null) {
-            prevDate = currDate
-          }
-        }
-        else {
+        if (currDate != prevDate && prevDate != null) {
           currSum = 0.0
+          prevDate = null
+        }
+        currSum += this.history[dateTime][1]
+        if (currSum >= this.minimum) {
+          successes[currDate] = currSum
+        }
+        if(prevDate == null) {
           prevDate = currDate
         }
       })
@@ -60,9 +58,9 @@ export default function Habit(name, type, schedule, goal, minimum, goalRange, hi
       today = today.toString().split("/")
       Object.keys(history).map((date, i) => {
         date = date.split("/")
-        if (date[2].split(' ')[0] < today[2] 
-        || (date[2].split(' ')[0] == today[2] && date[1] < today[1]) 
-        || (date[2].split(' ')[0] == today[2] && date[1] == today[1] && date[0] <= today[0])) {
+        if (parseFloat(date[2].split(' ')[0]) < parseFloat(today[2]) 
+        || (parseFloat(date[2].split(' ')[0]) == parseFloat(today[2]) && parseFloat(date[1]) < parseFloat(today[1])) 
+        || (parseFloat(date[2].split(' ')[0]) == parseFloat(today[2]) && parseFloat(date[1]) == parseFloat(today[1]) && parseFloat(date[0]) <= parseFloat(today[0]))) {
           numProgressDays += 1;
         }
       })

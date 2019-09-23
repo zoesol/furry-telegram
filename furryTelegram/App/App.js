@@ -52,8 +52,51 @@ defaultData = {
   'devDate': new Date(2019, 0, 0)
 }
 
-useDefaults = () => {
-  console.log('Using the defaults')
+readDateFromString = (dateString) => {
+  year_month = dateString.split('-')
+  day = year_month[2].split('T')
+  hour_min = day[1].split(':')
+  secs = hour_min[2].split('.')
+  if (year_month[0].substring(0, 1) == '"') {
+    year_month[0] = year_month[0].substring(1)
+  }
+  return new Date(year_month[0], year_month[1]-1, day[0], hour_min[0], hour_min[1], secs[0])
+}
+
+getDate = function (currdate) {
+  var date = currdate.getDate(); //Current Date
+  var month = currdate.getMonth() + 1; //Current Month
+  var year = currdate.getFullYear(); //Current Year
+  return (date + '/' + month + '/' + year);
+}
+
+getDateTime = function (currdate) {
+  var hours = new Date().getHours(); //Current Hours
+  var min = new Date().getMinutes(); //Current Minutes
+  var sec = new Date().getSeconds(); //Current Seconds
+  return (this.getDate(currdate) + ' ' + hours + ':' + min + ':' + sec);
+}
+
+//Using the defaults withHistory assumed devMode is True
+useDefaults = (withHistory, habit_probs, num_days) => {
+  if (withHistory) {
+    //Add random log entries for a random number of days to each of the habits
+    currDate = defaultData['devDate']
+
+    for(var i=0; i < num_days; i++) {
+      currDate.setDate(currDate.getDate() + 1)
+      defaultData['habits'].map((habit, i) => {
+        if (Math.random() >= 1-habit_probs[i]) {
+          if (habit.type == "Binary") {
+            habit.history[getDateTime(currDate)] = ["Random Default Data", null]
+          }
+          else {
+            habit.history[getDateTime(currDate)] = ["Random Default Data", Math.random()*habit.minimum*1.5]
+          }
+        }
+      })
+    }
+  }
   _storeData('state', JSON.stringify(defaultData))
 }
 
@@ -68,7 +111,7 @@ export default class App extends React.Component {
       goals: [],
       devDate:  null
     };
-    useDefaults()
+    useDefaults(true, [0.5, 0.0, 0.9, 0.75], 20)
     this.initializeState().then(() => {
       this.setState({stateLoaded: true})
     })
@@ -79,22 +122,13 @@ export default class App extends React.Component {
       stateData = JSON.parse(value)
       habits = []
       stateData['habits'].map((raw_habit, i) => {
-        console.log(raw_habit)
         habits.push(new Habit(raw_habit.habit_name, raw_habit.type, raw_habit.schedule, raw_habit.goal, raw_habit.minimum, raw_habit.goalRange, raw_habit.history))
       })
       goals = []
       stateData['goals'].map((raw_goal, i) => {
         goals.push(new LongTermGoal(raw_goal.goal_name, raw_goal.description, raw_goal.end_date))
       })
-      year_month = stateData['devDate'].split('-')
-      day = year_month[2].split('T')
-      hour_min = day[1].split(':')
-      secs = hour_min[2].split('.')
-      if (year_month[0].substring(0, 1) == '"') {
-        year_month[0] = year_month[0].substring(1)
-      }
-      devDate = new Date(year_month[0], year_month[1]-1, day[0], hour_min[0], hour_min[1], secs[0])
-      console.log("DevDate from Storage", devDate)
+      devDate = readDateFromString(stateData['devDate'])
       this.setState({habits: habits, goals: goals, devDate: devDate})
     })
   }
