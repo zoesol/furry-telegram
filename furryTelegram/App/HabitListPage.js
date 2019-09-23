@@ -35,7 +35,7 @@ export default class HabitListPage extends React.Component {
     
   }
 
-  addHabitTabComponent = (habit) => {
+  addHabitTabComponent = (habit, i) => {
     return (
         <View key={i} style={styles.habitTab}>
             <Button style
