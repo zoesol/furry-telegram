@@ -1,3 +1,5 @@
+import {getDate, getDateTime} from './utils' 
+
 /*
 * Object: Habit
 */
@@ -101,24 +103,20 @@ export default function Habit(name, type, schedule, goal, minimum, goalRange, hi
 
     this.getDate = function () {
       if (this.devMode) {
-        currdate = this.devDate
-        // console.log("DevMode Date:", currdate)
+        return getDate(this.devDate)
       }
       else {
-        currdate = new Date()
-        // console.log("Not DevMode Date:", currdate)
+        return getDate(new Date())
       }
-      var date = currdate.getDate(); //Current Date
-      var month = currdate.getMonth() + 1; //Current Month
-      var year = currdate.getFullYear(); //Current Year
-      return (date + '/' + month + '/' + year);
     }
 
     this.getDateTime = function () {
-      var hours = new Date().getHours(); //Current Hours
-      var min = new Date().getMinutes(); //Current Minutes
-      var sec = new Date().getSeconds(); //Current Seconds
-      return (this.getDate() + ' ' + hours + ':' + min + ':' + sec);
+      if (this.devMode) {
+        return getDateTime(this.devDate)
+      }
+      else {
+        return getDateTime(new Date())
+      }
     }
   };
 

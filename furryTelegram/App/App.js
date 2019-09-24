@@ -11,6 +11,7 @@ import Habit from './Habit';
 import LongTermGoal from './LongTermGoal';
 import CalendarPage from './CalendarPage';
 import AsyncStorage from '@react-native-community/async-storage';
+import {getDate, getDateTime} from './utils' 
 import { StyleSheet, Button, Text, View } from 'react-native';
 import { Provider as PaperProvider } from 'react-native-paper';
 
@@ -64,20 +65,6 @@ readDateFromString = (dateString) => {
   return new Date(year_month[0], year_month[1]-1, day[0], hour_min[0], hour_min[1], secs[0])
 }
 
-getDate = function (currdate) {
-  var date = currdate.getDate(); //Current Date
-  var month = currdate.getMonth() + 1; //Current Month
-  var year = currdate.getFullYear(); //Current Year
-  return (date + '/' + month + '/' + year);
-}
-
-getDateTime = function (currdate) {
-  var hours = new Date().getHours(); //Current Hours
-  var min = new Date().getMinutes(); //Current Minutes
-  var sec = new Date().getSeconds(); //Current Seconds
-  return (this.getDate(currdate) + ' ' + hours + ':' + min + ':' + sec);
-}
-
 //Using the defaults withHistory assumed devMode is True
 useDefaults = (withHistory, habit_probs, num_days) => {
   if (withHistory) {
@@ -112,7 +99,7 @@ export default class App extends React.Component {
       goals: [],
       devDate:  null
     };
-    useDefaults(true, [0.5, 0.0, 0.9, 0.75], 20)
+    useDefaults(true, [0.5, 0.7, 0.9, 0.75], 20)
     this.initializeState().then(() => {
       this.setState({stateLoaded: true})
     })

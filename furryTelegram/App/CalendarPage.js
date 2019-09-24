@@ -84,6 +84,7 @@ export default class CalendarPage extends React.Component {
         var rows = [];
         rows = matrix.map((row, rowIndex) => {
             var rowItems = row.map((item, colIndex) => {
+                console.log(item, this.state.activeDate, this.state.activeDate.getDate())
                 return (
                     <Text
                         key = {colIndex}
@@ -122,6 +123,12 @@ export default class CalendarPage extends React.Component {
                 {rows}
             </View>
         )
+    }
+
+    componentDidMount = () => {
+        if (this.props.screenProps.devMode) {
+            this.setState({activeDate: this.props.screenProps.devDate})
+        }
     }
 
     //React Render
