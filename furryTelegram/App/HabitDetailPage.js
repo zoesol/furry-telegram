@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, Button, Text, View} from 'react-native';
+import CalendarPage from './CalendarPage';
 
 export default class HabitListPage extends React.Component {
   constructor(props) {
@@ -27,6 +28,8 @@ export default class HabitListPage extends React.Component {
     return (
       <View style={styles.root}>
         {this.addPageTitleComponent()}
+        <CalendarPage>
+        </CalendarPage>
       </View>
     );
   }

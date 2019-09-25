@@ -5,7 +5,10 @@ export default class CalendarPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            activeDate: new Date()
+            activeDate: new Date(),
+            devMode: props.screenProps.devMode,
+            devDate: props.screenProps.devDate,
+            habits: props.screenProps.habits
         };
     }
 
@@ -81,7 +84,7 @@ export default class CalendarPage extends React.Component {
 
     checkForSuccess = (date) => {
         var bool = true
-        this.props.screenProps.habits.map((habit, i) => {
+        this.state.habits.map((habit, i) => {
             if (!(date in habit.getSuccessDays())) {
                 bool = false
             }
@@ -133,8 +136,8 @@ export default class CalendarPage extends React.Component {
     }
 
     componentDidMount = () => {
-        if (this.props.screenProps.devMode) {
-            this.setState({activeDate: this.props.screenProps.devDate})
+        if (this.state.devMode) {
+            this.setState({activeDate: this.state.devDate})
         }
     }
 

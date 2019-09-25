@@ -9,8 +9,9 @@ export default class HabitListPage extends React.Component {
   }
 
   addNewHabitButtonComponent = () => {
+    tabHeight = `${60.0/(this.props.screenProps.habits.length+1)}%`
       return (
-        <View style={[styles.habitTab, styles.addNewHabitButton]}>
+        <View style={[styles.habitTab, styles.addNewHabitButton, {height: tabHeight}]}>
             <Button style
                 title = 'New Habit'
                 onPress = {() => this.props.navigation.navigate('AddHabit', {
@@ -32,14 +33,20 @@ export default class HabitListPage extends React.Component {
             {this.addNewHabitButtonComponent()}
           </View>
       )
-    
   }
 
   addHabitTabComponent = (habit, i) => {
+    backcolor = `#07d400`;
+    progress = habit.getProgress()
+    if (progress > 0.0) {
+      backcolor = `#07d4${Math.min(Math.ceil(progress * 255), 255).toString(16)}`;
+    }
+    tabHeight = `${60.0/(this.props.screenProps.habits.length+1)}%`
     return (
-        <View key={i} style={styles.habitTab}>
+        <View key={i} style={[styles.habitTab, {backgroundColor: backcolor, height: tabHeight}]}>
             <Button style
                 title = {habit.habit_name}
+                color = 'black'
                 onPress = {() => this.props.navigation.navigate('HabitDetail', {
                     habit: habit,
                     src: 'Habits'
@@ -54,8 +61,8 @@ export default class HabitListPage extends React.Component {
   */
   addPageTitleComponent = () => {
     return (
-      <View style={styles.pageTitle}>
-        <Text>
+      <View style={styles.pageTitleView}>
+        <Text style={styles.pageTitle}>
           Habits
         </Text>
       </View>
@@ -85,14 +92,22 @@ const styles = StyleSheet.create({
     habitList: {
         width: "100%",
         height: "100%",
-        top: '20%'
+        top: '15%'
     },
     habitTab: {
         width: '100%',
-        height: '10%',
-        backgroundColor: 'grey'
+        backgroundColor: 'grey',
+        borderWidth: 1,
+        justifyContent: 'center'
     },
     addNewHabitButton: {
         backgroundColor: 'white'
-    }
+    },
+    pageTitleView: {
+      top: '5%',
+    },
+    pageTitle: {
+      fontWeight: 'bold',
+      fontSize: 40
+    },
 });
