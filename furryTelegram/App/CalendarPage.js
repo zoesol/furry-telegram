@@ -134,10 +134,10 @@ export default class CalendarPage extends React.Component {
             </View>
         )
     }
-
+ 
     componentDidMount = () => {
         if (this.state.devMode) {
-            this.setState({activeDate: this.state.devDate})
+            this.setState({activeDate: new Date(this.state.devDate.valueOf())})
         }
     }
 
