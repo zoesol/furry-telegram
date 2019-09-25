@@ -92,13 +92,14 @@ const styles = StyleSheet.create({
     habitList: {
         width: "100%",
         height: "100%",
-        top: '15%'
+        top: '10%'
     },
     habitTab: {
-        width: '100%',
+        width: '96%',
         backgroundColor: 'grey',
         borderWidth: 1,
-        justifyContent: 'center'
+        justifyContent: 'center',
+        margin: '2%'
     },
     addNewHabitButton: {
         backgroundColor: 'white'
