@@ -159,7 +159,7 @@ export default class HomePage extends React.Component {
       return (null)
     }
   }
-
+ 
 handleHabitLogIntervalInput = (inputText) => {
   this.setState({logInterval: inputText})
 }
@@ -169,7 +169,9 @@ handleHabitLogTextInput = (inputText) => {
 }
 
 handleSubmitDialog = () => {
-  this.props.screenProps.habits[this.state.lastPressed].updateLog(this.state.logText, this.state.logInterval)
+  habit = this.props.screenProps.habits[this.state.lastPressed]
+  updatedHistory = habit.updateLog(this.state.logText, this.state.logInterval)
+  this.props.screenProps.updateHabitCallback(this.state.lastPressed, updatedHistory)
   this.setState({isDialogVisible: false, logText: "", logInterval: 0}) 
 }
 

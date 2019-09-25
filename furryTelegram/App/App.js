@@ -145,6 +145,14 @@ export default class App extends React.Component {
     this.setState({devDate: yesterday})
   }
 
+  updateHabitCallback = (i, updatedHistory) => {
+    updatedHabit = this.state.habits[i]
+    updatedHabit.history = updatedHistory
+    updatedHabits = this.state.habits
+    updatedHabits[i] = updatedHabit
+    this.setState({habits: updatedHabits})
+  }
+
   componentDidUpdate = () => {
     console.log(this.state.habits)
     this.state.habits.map((habit, i) => {
@@ -170,6 +178,7 @@ export default class App extends React.Component {
           'devDate': this.state.devDate,
           'incrementDevDateCallback': this.incrementDevDateCallback,
           'decrementDevDateCallback': this.decrementDevDateCallback,
+          'updateHabitCallback': this.updateHabitCallback
         }}
       />;
     }

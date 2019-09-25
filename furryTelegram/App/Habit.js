@@ -70,9 +70,8 @@ export default function Habit(name, type, schedule, goal, minimum, goalRange, hi
     }
 
     this.updateLog = function (logText, logInterval) {
-      //Just uses random numer as key right now
-      //In the future make this the current date and time
       this.history[this.getDateTime()] = [logText, parseFloat(logInterval)]
+      return this.history
     };
 
     this.getProgressTowardsMinimum = function () {
