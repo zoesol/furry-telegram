@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text} from 'react-native';
+import { StyleSheet, View, Text, Button} from 'react-native';
 
 export default class CalendarPage extends React.Component {
     constructor(props) {
@@ -79,12 +79,22 @@ export default class CalendarPage extends React.Component {
         });
     };
 
+    checkForSuccess = (date) => {
+        var bool = true
+        this.props.screenProps.habits.map((habit, i) => {
+            if (!(date in habit.getSuccessDays())) {
+                bool = false
+            }
+        })
+        return bool
+    }
+
     addCalendarBodyComponents = () => {
         var matrix = this.generateMatrix();
         var rows = [];
         rows = matrix.map((row, rowIndex) => {
             var rowItems = row.map((item, colIndex) => {
-                console.log(item, this.state.activeDate, this.state.activeDate.getDate())
+                var success = this.checkForSuccess(`${item}/${this.state.activeDate.getMonth()+1}/${this.state.activeDate.getFullYear()}`)
                 return (
                     <Text
                         key = {colIndex}
@@ -92,11 +102,8 @@ export default class CalendarPage extends React.Component {
                             flex: 1,
                             height: 18,
                             textAlign: 'center',
-                            // Highlight header
-                            backgroundColor: rowIndex == 0 ? '#ddd' : '#fff',
-                            // Highlight Sundays
-                            color: colIndex == 0 ? '#a00' : '#000',
-                            // Highlight current date
+                            backgroundColor: success ? '#0f0' : '#fff',
+                            color: success || rowIndex == 0 ? '#000' : '#a00',
                             fontWeight: item == this.state.activeDate.getDate() ? 'bold': 'normal'
                         }}
                         onPress={() => this._onPress(item)}>
@@ -131,6 +138,15 @@ export default class CalendarPage extends React.Component {
         }
     }
 
+    changeMonth = (n) => {
+        this.setState(() => {
+          this.state.activeDate.setMonth(
+            this.state.activeDate.getMonth() + n
+          )
+          return this.state;
+        });
+    }
+
     //React Render
     render() {
         var matrix = this.generateMatrix();
@@ -138,6 +154,10 @@ export default class CalendarPage extends React.Component {
             <View>
                 {this.addMonthYearTextComponents()}
                 {this.addCalendarBodyComponents()}
+                <Button title="Previous"
+                    onPress={() => this.changeMonth(-1)}/>
+                <Button title="Next"
+                    onPress={() => this.changeMonth(+1)}/>
             </View>
         );
     }

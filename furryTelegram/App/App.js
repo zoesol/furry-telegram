@@ -36,10 +36,10 @@ _retrieveData = async (key) => {
 
 defaultData = {
   "habits": [
-      new Habit("Stretch", "Continuous", {}, 30, 60, 'Weekly', {}),
-      new Habit("Yoga", "Binary", {"Monday": "Evening", "Wednesday": "Afternoon", "Friday": "Evening"}, 15, null, 'Monthly', {}),
-      new Habit("Prehab", "Binary", {}, 30, null, 'Weekly', {}),
-      new Habit("Water", "Continuous", {}, 30, 1, 'Weekly', {}),
+      new Habit("Stretch", "Continuous", {}, 300, 60, 'Weekly', {}),
+      new Habit("Yoga", "Binary", {"Monday": "Evening", "Wednesday": "Afternoon", "Friday": "Evening"}, 200, null, 'Monthly', {}),
+      new Habit("Prehab", "Binary", {}, 250, null, 'Weekly', {}),
+      new Habit("Water", "Continuous", {}, 300, 1, 'Weekly', {}),
   ],
   "goals": [
     new LongTermGoal(
@@ -79,7 +79,7 @@ useDefaults = (withHistory, habit_probs, num_days) => {
             habit.history[getDateTime(currDate)] = ["Random Default Data", null]
           }
           else {
-            habit.history[getDateTime(currDate)] = ["Random Default Data", Math.random()*habit.minimum*1.5]
+            habit.history[getDateTime(currDate)] = ["Random Default Data", Math.random()*habit.minimum*2.5]
           }
         }
       })
@@ -99,7 +99,7 @@ export default class App extends React.Component {
       goals: [],
       devDate:  null
     };
-    useDefaults(true, [0.5, 0.7, 0.9, 0.75], 20)
+    useDefaults(true, [1, 1, 1, 1], 150)
     this.initializeState().then(() => {
       this.setState({stateLoaded: true})
     })
@@ -146,6 +146,7 @@ export default class App extends React.Component {
   }
 
   componentDidUpdate = () => {
+    console.log(this.state.habits)
     this.state.habits.map((habit, i) => {
       habit.updateMode(this.state.devMode, this.state.devDate)
     })
