@@ -192,7 +192,6 @@ handleCloseDialog = () => {
             addHabitCallback: this.props.screenProps.addNewHabitCallback,
             src: "Home"
           })}
-          color='white'
         />
       </View>
     )
@@ -201,16 +200,14 @@ handleCloseDialog = () => {
   addDateChangeComponents = () => {
     if(this.props.screenProps.devMode) {
       return (
-        <View style={styles.dateChangeButton}>
+        <View style={[styles.dateChangeButton, {width:'100%', justifyContent: 'space-between'}]}>
           <Button
             title="Increment Date"
             onPress={this.props.screenProps.incrementDevDateCallback}
-            color='white'
           />
           <Button
             title="Decrement Date"
             onPress={this.props.screenProps.decrementDevDateCallback}
-            color='white'
           />
         </View>
       )
@@ -245,15 +242,15 @@ handleCloseDialog = () => {
   /*
   * Creates a Text Component for the Page Title
   */
-  addPageTitleComponent = () => {
-    return (
-      <View style={styles.pageTitle}>
-        <Text>
-          Home
-        </Text>
-      </View>
-    )
-  }
+ addPageTitleComponent = () => {
+  return (
+    <View style={styles.pageTitleView}>
+      <Text style={styles.pageTitle}>
+        Home
+      </Text>
+    </View>
+  )
+}
 
   componentDidMount = () => {
   }
@@ -262,8 +259,8 @@ handleCloseDialog = () => {
   render() {
     return (
       <View style={styles.homePage}>
-        {this.addPageTitleComponent()}
         {this.addDateComponent()}
+        {this.addPageTitleComponent()}
         {this.addDateChangeComponents()}
         {this.addNewHabitButtonComponent()}
         {this.addHabitButtonComponents()}
@@ -283,7 +280,7 @@ const styles = StyleSheet.create({
   habitGroup: {
     width: '100%',
     height: '50%',
-    top: '95%',
+    top: '5%',
     justifyContent: 'space-between',
     alignItems: 'center',
     alignContent: 'center',
@@ -301,11 +298,11 @@ const styles = StyleSheet.create({
     top: '10%',
   },
   addHabitButton: {
-    position: 'absolute',
-    top: '3%',
-    left: '10%',
-    backgroundColor:"purple",
-    width: '30%'
+    top: '60%',
+    left: '00%',
+    backgroundColor: 'white',
+    width: '30%',
+    borderWidth: 1,
   },
   goalsButton: {
     top: '3%',
@@ -318,19 +315,27 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   dateText: {
-    top: '35%'
+    top: '2%',
+    left: '-20%'
   },
   dateChangeButton: {
     position: 'absolute',
-    top: '7%',
-    left: '70%',
-    backgroundColor:"purple",
-    width: '30%'
+    top: '85%',
+    backgroundColor:"white",
+    width: '30%',
+    borderWidth: 1,
   },
   modalInputBox: {
     height: '40%',
     width: '75%',
     backgroundColor: 'white',
     alignItems: 'center'
-  }
+  },
+  pageTitleView: {
+    top: '5%',
+  },
+  pageTitle: {
+    fontWeight: 'bold',
+    fontSize: 40
+  },
 });
