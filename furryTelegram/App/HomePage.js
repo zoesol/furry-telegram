@@ -15,6 +15,8 @@ export default class HomePage extends React.Component {
     };
   }
 
+  DAYS_OF_WEEK = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+
  /*
  * Maps the list of Habit Object and Creates a Button Component for each
  *  Each Habit Button can be clicked to log the completion of that habit.
@@ -31,6 +33,9 @@ export default class HomePage extends React.Component {
             if (progress >= 1.0) {
               bWidth = 1
             }
+          }
+          if (Object.keys(habit.schedule).length >= 1 && (habit.schedule[this.DAYS_OF_WEEK[this.props.screenProps.devDate.getDay()]] == "X")) {
+            backcolor = 'grey'
           }
           return (
             <View key={i} style={[styles.habit, {backgroundColor: backcolor, borderWidth: bWidth}]}>
@@ -287,7 +292,6 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     flexDirection: 'row',
     position: 'relative',
-    backgroundColor: 'lightgrey',
   },
   habit: {
     width: 80, height: 80, margin: 10,

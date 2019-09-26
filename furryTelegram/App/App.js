@@ -79,7 +79,7 @@ useDefaults = (withHistory, habit_probs, num_days) => {
             habit.history[getDateTime(currDate)] = ["Random Default Data", null]
           }
           else {
-            habit.history[getDateTime(currDate)] = ["Random Default Data", Math.random()*habit.minimum*2.5]
+            habit.history[getDateTime(currDate)] = ["Random Default Data", Math.random()*habit.minimum*1.5]
           }
         }
       })
@@ -99,7 +99,7 @@ export default class App extends React.Component {
       goals: [],
       devDate:  null
     };
-    useDefaults(true, [1, 1, 1, 1], 150)
+    useDefaults(true, [1, 0.6, 0.8, 1], 150)
     this.initializeState().then(() => {
       this.setState({stateLoaded: true})
     })
