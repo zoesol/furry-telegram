@@ -34,7 +34,8 @@ export default class HomePage extends React.Component {
               bWidth = 1
             }
           }
-          if (Object.keys(habit.schedule).length >= 1 && (habit.schedule[this.DAYS_OF_WEEK[this.props.screenProps.devDate.getDay()]] == "X")) {
+          //Detects fixed habits that are not schedule for the active date and sets background of the habit icon to grey
+          if (habit.schedule[this.DAYS_OF_WEEK[this.props.screenProps.devDate.getDay()]] == "X") {
             backcolor = 'grey'
           }
           return (

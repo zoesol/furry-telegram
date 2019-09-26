@@ -5,22 +5,37 @@ import {getDate, getDateTime} from './utils'
 */
 export default function Habit(name, type, schedule, goal, minimum, goalRange, history) {
     this.habit_name = name;
-    //Binary or Continuous
     this.type = type;
     this.history = history;
-    //A map of the day of week to time of day the activity has to be complete
-    // Value is 'X' if the activity is not scheudled for that day of the week
+    this.activeDate = new Date()
     this.schedule = constructSchedule(schedule);
     this.goal = goal;
     this.goalRange = goalRange;
 
-    this.devMode = null
-    this.devDate = null
+    this.getGoalEndDate = function(goalRange) {
+      var newDate = new Date(+this.activeDate);
+      if (goalRange == "Weekly") {
+        newDate.setDate(newDate.getDate() + (7-newDate.getDay()%7+1))
+      }
+      else if(goalRange == "Monthly") {
+        newDate.setMonth(newDate.getMonth() + 1)
+        newDate.setDate(1)
+      }
+      else if(goalRange == "Annual") {
+        newDate.setFullYear(newDate.getFullYear() + 1)
+        newDate.setMonth(0)
+        newDate.setDate(0)
+      }
+      return newDate
+    }
 
-    this.updateMode = (mode, date) => {
-      this.devMode = mode
-      if (mode) {
-        this.devDate = date
+    this.goalEndDate = null
+
+
+    this.updateMode = (devMode, devDate) => {
+      if (devMode) {
+        this.activeDate = devDate
+        this.goalEndDate = this.getGoalEndDate(this.goalRange)
       }
     }
 
@@ -101,21 +116,11 @@ export default function Habit(name, type, schedule, goal, minimum, goalRange, hi
     this.minimum = minimum;
 
     this.getDate = function () {
-      if (this.devMode) {
-        return getDate(this.devDate)
-      }
-      else {
-        return getDate(new Date())
-      }
+      return getDate(this.activeDate)
     }
 
     this.getDateTime = function () {
-      if (this.devMode) {
-        return getDateTime(this.devDate)
-      }
-      else {
-        return getDateTime(new Date())
-      }
+      return getDateTime(this.activeDate)
     }
   };
 
