@@ -19,7 +19,7 @@ export default function Habit(name, type, schedule, goal, minimum, goalRange, hi
       }
       else if(goalRange == "Monthly") {
         newDate.setMonth(newDate.getMonth() + 1)
-        newDate.setDate(1)
+        newDate.setDate(0)
       }
       else if(goalRange == "Annual") {
         newDate.setFullYear(newDate.getFullYear() + 1)

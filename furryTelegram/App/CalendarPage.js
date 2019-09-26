@@ -92,12 +92,24 @@ export default class CalendarPage extends React.Component {
         return bool
     }
 
+    isGoalEndDate = (calDate) => {
+        var bool = false
+        this.state.habits.map((habit, i) => {
+            modDate = `${habit.goalEndDate.getDate()}/${habit.goalEndDate.getMonth()+1}/${habit.goalEndDate.getFullYear()}`
+            if (modDate == calDate) {
+                bool = true
+            }
+        })
+        return bool
+    }
+
     addCalendarBodyComponents = () => {
         var matrix = this.generateMatrix();
         var rows = [];
         rows = matrix.map((row, rowIndex) => {
             var rowItems = row.map((item, colIndex) => {
-                var success = this.checkForSuccess(`${item}/${this.state.activeDate.getMonth()+1}/${this.state.activeDate.getFullYear()}`)
+                var calDate = `${item}/${this.state.activeDate.getMonth()+1}/${this.state.activeDate.getFullYear()}`;
+                var success = this.checkForSuccess(calDate)
                 return (
                     <Text
                         key = {colIndex}
@@ -107,6 +119,7 @@ export default class CalendarPage extends React.Component {
                             textAlign: 'center',
                             backgroundColor: success ? '#0f0' : '#fff',
                             color: success || rowIndex == 0 ? '#000' : '#a00',
+                            borderWidth: this.isGoalEndDate(calDate) ? 1: 0,
                             fontWeight: item == this.state.activeDate.getDate() ? 'bold': 'normal'
                         }}
                         onPress={() => this._onPress(item)}>
