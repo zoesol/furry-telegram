@@ -16,6 +16,7 @@ export default class HomePage extends React.Component {
   }
 
   DAYS_OF_WEEK = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+  MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 
  /*
  * Maps the list of Habit Object and Creates a Button Component for each
@@ -232,9 +233,10 @@ handleCloseDialog = () => {
     currDate = new Date()
    }
    var date =  currDate.getDate(); //Current Date
-   var month = currDate.getMonth()+1; //Current Month
+   var month = this.MONTHS[currDate.getMonth()]; //Current Month
    var year = currDate.getFullYear(); //Current Year
-   currDate = date + '/' + month + '/' + year
+   var day_of_week = this.DAYS_OF_WEEK[currDate.getDay()]
+   currDate = day_of_week + " " + month + " " + date + " " + year
 
    return (
     <View style={styles.dateText}>
@@ -321,7 +323,7 @@ const styles = StyleSheet.create({
   },
   dateText: {
     top: '2%',
-    left: '-20%'
+    left: '-10%'
   },
   dateChangeButton: {
     position: 'absolute',

@@ -12,10 +12,30 @@ export default function Habit(name, type, schedule, goal, minimum, goalRange, hi
     this.goal = goal;
     this.goalRange = goalRange;
 
-    this.getGoalEndDate = function(goalRange) {
+    this.getPrevGoalDate = (currDate) => {
+      var newDate = new Date(+currDate);
+      if (this.goalRange == "Weekly") {
+        newDate.setDate(newDate.getDate() - (newDate.getDay() + 6) % 7 - 1);
+        if (newDate.getDate() == currDate.getDate()) {
+          newDate.setDate(newDate.getDate()-1)
+          newDate.setDate(newDate.getDate() - (newDate.getDay() + 6) % 7 - 1);
+        }
+      }
+      else if (this.goalRange == "Monthly") {
+        newDate.setDate(0)
+      }
+      else if (this.goalRange == "Annual") {
+        newDate.setMonth(0)
+        newDate.setDate(0)
+      }
+      return newDate
+    }
+
+    this.getGoalEndDate = function() {
+      goalRange = this.goalRange
       var newDate = new Date(+this.activeDate);
       if (goalRange == "Weekly") {
-        newDate.setDate(newDate.getDate() + (7-newDate.getDay()%7+1))
+        newDate.setDate(newDate.getDate() + (7-newDate.getDay()%7+1) - 1)
       }
       else if(goalRange == "Monthly") {
         newDate.setMonth(newDate.getMonth() + 1)
@@ -29,13 +49,53 @@ export default function Habit(name, type, schedule, goal, minimum, goalRange, hi
       return newDate
     }
 
+    this.getGoalHistory = function() {
+      goals = {}
+      curr = new Date(+this.goalEndDate)
+      prev = this.getPrevGoalDate(curr)
+      prev.setHours(0)
+      sum = 0
+
+      //Assumes history is sorted chronologically
+      Object.keys(this.history).reverse().map((date, i) => {
+        part = date.split(' ')[0].split("/")
+        newDate = new Date(parseInt(part[2]), parseInt(part[1])-1, parseInt(part[0]))
+        
+        if(prev < newDate) {
+          sum += 1
+        }
+        else if (prev >= newDate) {
+          if (sum >= this.goal) {
+            goals[new Date(+curr)] = true
+          }
+          else {
+            goal[new Date(+curr)] = false
+          }
+          sum = 0
+          if (newDate.getDate() == prev.getDate()) {
+            sum += 1
+          }
+          curr = new Date(+prev)
+          prev = new Date(+this.getPrevGoalDate(curr))
+          prev.setHours(0)
+        }
+      })
+      if (sum >= this.goal) {
+        goals[new Date(+curr)] = true
+      }
+      return goals
+    }
+
+    this.goalHistory = null
+
     this.goalEndDate = null
 
 
     this.updateMode = (devMode, devDate) => {
       if (devMode) {
         this.activeDate = devDate
-        this.goalEndDate = this.getGoalEndDate(this.goalRange)
+        this.goalEndDate = this.getGoalEndDate()
+        this.goalHistory = this.getGoalHistory()
       }
     }
 

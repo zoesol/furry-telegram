@@ -36,10 +36,10 @@ _retrieveData = async (key) => {
 
 defaultData = {
   "habits": [
-      new Habit("Stretch", "Continuous", {}, 300, 60, 'Weekly', {}),
-      new Habit("Yoga", "Binary", {"Monday": "Evening", "Wednesday": "Afternoon", "Friday": "Evening"}, 200, null, 'Monthly', {}),
-      new Habit("Prehab", "Binary", {}, 250, null, 'Weekly', {}),
-      new Habit("Water", "Continuous", {}, 300, 1, 'Weekly', {}),
+      new Habit("Stretch", "Binary", {}, 7, 30, 'Weekly', {}),
+      // new Habit("Yoga", "Binary", {"Monday": "Evening", "Wednesday": "Afternoon", "Friday": "Evening"}, 7, null, 'Weekly', {}),
+      // new Habit("Prehab", "Binary", {}, 7, null, 'Weekly', {}),
+      // new Habit("Water", "Binary", {}, 7, 1, 'Weekly', {}),
   ],
   "goals": [
     new LongTermGoal(
@@ -51,7 +51,7 @@ defaultData = {
      "Start in front splits, rotate to middle splits, and end in the other side splits!", 
       "10/20/20"),
   ],
-  'devDate': new Date(2019, 0, 0)
+  'devDate': new Date(2019, 0, 7)
 }
 
 readDateFromString = (dateString) => {
@@ -72,7 +72,6 @@ useDefaults = (withHistory, habit_probs, num_days) => {
     currDate = defaultData['devDate']
 
     for(var i=0; i < num_days; i++) {
-      currDate.setDate(currDate.getDate() + 1)
       defaultData['habits'].map((habit, i) => {
         if (Math.random() >= 1-habit_probs[i]) {
           if (habit.type == "Binary") {
@@ -83,6 +82,7 @@ useDefaults = (withHistory, habit_probs, num_days) => {
           }
         }
       })
+      currDate.setDate(currDate.getDate() + 1)
     }
   }
   _storeData('state', JSON.stringify(defaultData))
@@ -97,9 +97,9 @@ export default class App extends React.Component {
       devMode: true,
       habits: [],
       goals: [],
-      devDate:  null
+      devDate:  null,
     };
-    useDefaults(true, [1, 0.6, 0.8, 1], 150)
+    useDefaults(true, [0.95, 0.8, 0.9, 1], 28)
     this.initializeState().then(() => {
       this.setState({stateLoaded: true})
     })
