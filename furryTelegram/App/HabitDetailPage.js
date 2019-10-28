@@ -5,6 +5,7 @@ import CalendarPage from './CalendarPage';
 export default class HabitListPage extends React.Component {
   constructor(props) {
     super(props);
+    console.log(props);
     this.state = { 
         habit: props.navigation.getParam('habit', null)
     };
@@ -28,7 +29,7 @@ export default class HabitListPage extends React.Component {
     return (
       <View style={styles.root}>
         {this.addPageTitleComponent()}
-        <CalendarPage>
+        <CalendarPage screenProps = {this.props.screenProps}>
         </CalendarPage>
       </View>
     );
@@ -42,6 +43,6 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     pageTitle: {
-        top: '10%',
+        top: '3%',
     },
 });

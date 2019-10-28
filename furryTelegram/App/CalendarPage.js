@@ -60,7 +60,21 @@ export default class CalendarPage extends React.Component {
 
     addMonthYearTextComponents = () => {
         return (
-            <View>
+            <View style = {{
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+                }}>
+                <View class='buttonContainer'
+                    style= {{
+                        position: 'absolute',
+                        left: 20,
+                    }}>
+                    <Button 
+                        title="<<"
+                        onPress={() => this.changeMonth(-1)}
+                    />
+                </View>
                 <Text style={{
                     fontWeight: 'bold',
                     fontSize: 18,
@@ -69,6 +83,14 @@ export default class CalendarPage extends React.Component {
                     {this.months[this.state.activeDate.getMonth()]} &nbsp;
                     {this.state.activeDate.getFullYear()}
                 </Text>
+                <View class='buttonContainer'
+                style= {{
+                    position: 'absolute',
+                    right: 0,
+                }}>
+                    <Button title=">>"
+                        onPress={() => this.changeMonth(+1)}/>
+                </View>
             </View>
         )
     }
@@ -114,13 +136,12 @@ export default class CalendarPage extends React.Component {
                     <Text
                         key = {colIndex}
                         style={{
-                            flex: 1,
-                            height: 18,
                             textAlign: 'center',
                             backgroundColor: success ? '#0f0' : '#fff',
                             color: success || rowIndex == 0 ? '#000' : '#a00',
                             borderWidth: this.isGoalEndDate(calDate) ? 1: 0,
-                            fontWeight: item == this.state.activeDate.getDate() ? 'bold': 'normal'
+                            fontWeight: item == this.state.activeDate.getDate() ? 'bold': 'normal',
+                            width: 50, // probably shouldn't be hard-coded
                         }}
                         onPress={() => this._onPress(item)}>
                             {item != -1 ? item : ''}
@@ -131,10 +152,10 @@ export default class CalendarPage extends React.Component {
                 <View
                     key = {rowIndex}
                     style={{
-                        flex: 1,
                         flexDirection: 'row',
+                        width: '100%',
+                        height: 50,
                         padding: 15,
-                        justifyContent: 'space-around',
                         alignItems: 'center',
                     }}>
                     {rowItems}
@@ -145,6 +166,7 @@ export default class CalendarPage extends React.Component {
             <View>
                 {rows}
             </View>
+            
         )
     }
  
@@ -163,17 +185,22 @@ export default class CalendarPage extends React.Component {
         });
     }
 
+    makeCalendar = () => {
+        var firstDay = new Date(this.state.activeDate.getFullYear(), 
+            this.state.activeDate.getMonth(), 1).getDay();
+        for (var i = 0; i < 6; i++) {
+
+        }
+    }
+
     //React Render
     render() {
         var matrix = this.generateMatrix();
         return (
-            <View>
+            <View style = {{ top: '5%' }}
+            >
                 {this.addMonthYearTextComponents()}
                 {this.addCalendarBodyComponents()}
-                <Button title="Previous"
-                    onPress={() => this.changeMonth(-1)}/>
-                <Button title="Next"
-                    onPress={() => this.changeMonth(+1)}/>
             </View>
         );
     }
