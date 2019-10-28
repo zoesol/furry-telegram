@@ -86,7 +86,7 @@ export default class CalendarPage extends React.Component {
                 <View class='buttonContainer'
                 style= {{
                     position: 'absolute',
-                    right: 0,
+                    right: 20,
                 }}>
                     <Button title=">>"
                         onPress={() => this.changeMonth(+1)}/>
