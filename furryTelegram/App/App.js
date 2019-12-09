@@ -232,7 +232,7 @@ const AppNavigator = createStackNavigator(
       navigationOptions: {
         headerTitle: 'Home'
       }
-    },    
+    },
     AddHabit: {
       screen: AddHabitPage,
       navigationOptions: {

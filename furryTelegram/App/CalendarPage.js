@@ -71,7 +71,7 @@ export default class CalendarPage extends React.Component {
                         left: 20,
                     }}>
                     <Button 
-                        title="<<"
+                        title="<"
                         onPress={() => this.changeMonth(-1)}
                     />
                 </View>
@@ -88,7 +88,7 @@ export default class CalendarPage extends React.Component {
                     position: 'absolute',
                     right: 20,
                 }}>
-                    <Button title=">>"
+                    <Button title=">"
                         onPress={() => this.changeMonth(+1)}/>
                 </View>
             </View>
@@ -138,7 +138,7 @@ export default class CalendarPage extends React.Component {
                         style={{
                             textAlign: 'center',
                             backgroundColor: success ? '#0f0' : '#fff',
-                            color: success || rowIndex == 0 ? '#000' : '#a00',
+                            color: 'black',
                             borderWidth: this.isGoalEndDate(calDate) ? 1: 0,
                             fontWeight: item == this.state.activeDate.getDate() ? 'bold': 'normal',
                             width: 50, // probably shouldn't be hard-coded
