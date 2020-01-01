@@ -38,3 +38,4 @@ When this happens just delete the repo and reclone. If that doesnt work then npm
 
 If running "react-native run-ios" gives you the following error: 'Could not find "iPhone X" simulator. Run CLI with --verbose flag for more details,' then you need to open XCode, open the project from the ios directory, search devices and simulators in help, got to simulators and then in the bottom right corner add the iphone X. 
 
+If your build fails with error code 2 and says 'Port 8081 already in use, packager is either not running or not running correctly' - then follow this link for support. https://stackoverflow.com/questions/30216417/react-native-port-8081-already-in-use-packager-is-either-not-running-or-not-r
