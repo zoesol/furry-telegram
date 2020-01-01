@@ -35,3 +35,6 @@ Two Options
 
 Sometimes there will be a random error with a hast cache map or something.  
 When this happens just delete the repo and reclone. If that doesnt work then npm install whatever it says it missing and rebuild until it stops. 
+
+If running "react-native run-ios" gives you the following error: 'Could not find "iPhone X" simulator. Run CLI with --verbose flag for more details,' then you need to open XCode, open the project from the ios directory, search devices and simulators in help, got to simulators and then in the bottom right corner add the iphone X. 
+
